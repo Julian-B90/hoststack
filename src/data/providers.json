@@ -77,7 +77,9 @@
     "region": "global",
     "affiliate_url": "",
     "website_url": "https://www.cloudflare.com/",
-    "short_desc": "CDN-, Security- und Edge-Compute-Plattform mit globalem Netzwerk."
+    "short_desc": "CDN-, Security- und Edge-Compute-Plattform mit globalem Netzwerk.",
+    "logo_note_de": "Logo-Nutzung eingeschränkt (Trademark-Guidelines).",
+    "logo_note_en": "Logo use restricted (trademark guidelines)."
   },
   {
     "id": "cloudray",

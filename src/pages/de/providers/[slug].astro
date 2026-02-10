@@ -39,6 +39,9 @@ const integrations = Array.from(
           <p class="badge">Anbieter</p>
           <h1 class="mt-3 text-3xl font-display uppercase tracking-[0.1em]">{provider.name}</h1>
           {provider.short_desc && <p class="mt-2 text-ink/70">{provider.short_desc}</p>}
+          {provider.logo_note_de && (
+            <p class="mt-2 text-xs uppercase tracking-[0.2em] text-ink/50">{provider.logo_note_de}</p>
+          )}
         </div>
       </div>
       <div class="flex flex-wrap items-center gap-3">

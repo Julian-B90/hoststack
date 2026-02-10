@@ -31,6 +31,11 @@ const basePath = '/de/providers';
               {provider.region || 'global'}
             </span>
           </div>
+          {provider.logo_note_de && (
+            <p class="mt-1 text-[10px] uppercase tracking-[0.2em] text-ink/50">
+              {provider.logo_note_de}
+            </p>
+          )}
           <p class="mt-2 text-sm text-ink/70">
             {provider.short_desc || 'Kurzbeschreibung folgt.'}
           </p>
