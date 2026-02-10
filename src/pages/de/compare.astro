@@ -79,7 +79,15 @@ const hasPlans = enrichedPlans.length > 0;
                 data-ssl={plan.ssl ? 'true' : 'false'}
                 data-integration={(plan.integration_tags || []).join(',')}
               >
-                <td class="py-3 pr-4 font-semibold">{plan.provider?.name || plan.provider_id}</td>
+                <td class="py-3 pr-4 font-semibold">
+                  {plan.provider?.slug ? (
+                    <a class="hover:underline" href={`/de/providers/${plan.provider.slug}`}>
+                      {plan.provider?.name || plan.provider_id}
+                    </a>
+                  ) : (
+                    plan.provider?.name || plan.provider_id
+                  )}
+                </td>
                 <td class="py-3 pr-4">{plan.plan_name}</td>
                 <td class="py-3 pr-4">
                   <span class="price" data-eur={plan.price_eur ?? ''} data-usd={plan.price_usd ?? ''}></span>

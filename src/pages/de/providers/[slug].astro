@@ -47,6 +47,11 @@ const integrations = Array.from(
             Anbieter besuchen
           </a>
         )}
+        {provider.website_url && (
+          <a class="btn-outline" href={provider.website_url} rel="noopener noreferrer" target="_blank">
+            Zur Website
+          </a>
+        )}
         <a class="btn-outline" href="/de/compare">Vergleich öffnen</a>
       </div>
     </div>
