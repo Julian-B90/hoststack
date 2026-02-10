@@ -1,0 +1,44 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import strings from '../../../data/i18n/de.json';
+import providers from '../../../data/providers.json';
+
+const basePath = '/de/providers';
+---
+<BaseLayout lang="de" title="HostStack - Anbieter" strings={strings}>
+  <section class="card">
+    <h1 class="text-3xl font-display uppercase tracking-[0.1em]">Anbieter</h1>
+    <p class="mt-3 text-ink/70">Alle Anbieter im Vergleichsindex.</p>
+  </section>
+
+  <section class="mt-8 grid gap-4 md:grid-cols-2">
+    {providers.map((provider) => (
+      <a
+        class="card flex items-center gap-4 transition hover:-translate-y-1"
+        href={`${basePath}/${provider.slug}`}
+      >
+        <div class="flex h-12 w-12 items-center justify-center rounded-2xl border border-ink/10 bg-white text-xs uppercase tracking-[0.2em] text-ink/50">
+          {provider.logo ? (
+            <img src={provider.logo} alt={`${provider.name} logo`} class="h-8 w-8 object-contain" />
+          ) : (
+            provider.name.slice(0, 2)
+          )}
+        </div>
+        <div>
+          <div class="flex items-center gap-3">
+            <h2 class="text-lg font-semibold">{provider.name}</h2>
+            <span class="rounded-full border border-ink/10 px-2 py-0.5 text-[10px] uppercase tracking-[0.2em] text-ink/60">
+              {provider.region || 'global'}
+            </span>
+          </div>
+          <p class="mt-2 text-sm text-ink/70">
+            {provider.short_desc || 'Kurzbeschreibung folgt.'}
+          </p>
+          <span class="mt-3 inline-flex text-xs uppercase tracking-[0.2em] text-ink/60">
+            Zum Anbieter
+          </span>
+        </div>
+      </a>
+    ))}
+  </section>
+</BaseLayout>

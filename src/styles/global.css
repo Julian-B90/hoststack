@@ -1,0 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  @apply bg-sand text-ink font-body;
+}
+
+.gradient-bg {
+  background:
+    radial-gradient(1200px 500px at 10% -10%, rgba(255, 122, 69, 0.25), transparent 70%),
+    radial-gradient(900px 400px at 90% 10%, rgba(15, 123, 108, 0.25), transparent 65%),
+    linear-gradient(180deg, #f8f4ec 0%, #f1efe8 50%, #f5f2ea 100%);
+}
+
+.badge {
+  @apply inline-flex items-center gap-2 rounded-full border border-ink/10 px-3 py-1 text-xs uppercase tracking-[0.2em];
+}
+
+.card {
+  @apply rounded-2xl bg-white/90 p-6 shadow-card backdrop-blur;
+}
+
+.btn {
+  @apply inline-flex items-center justify-center rounded-full bg-ink px-5 py-3 text-sm font-semibold uppercase tracking-widest text-sand transition hover:translate-y-[-1px] hover:bg-ink/90;
+}
+
+.btn-outline {
+  @apply inline-flex items-center justify-center rounded-full border border-ink/20 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-ink transition hover:border-ink/40 hover:text-ink;
+}

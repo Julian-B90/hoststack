@@ -1,0 +1,578 @@
+[
+  {
+    "id": "aws-starter",
+    "provider_id": "aws",
+    "plan_name": "Starter",
+    "price_eur": 9,
+    "price_usd": 11,
+    "storage_gb": 10,
+    "traffic_gb": 100,
+    "domains": 1,
+    "ssl": true,
+    "integration_tags": [
+      "git",
+      "ci/cd",
+      "ssl"
+    ],
+    "notes": "Placeholder data for prototype. Replace with real pricing.",
+    "last_verified_at": null
+  },
+  {
+    "id": "aws-flightcontrol-starter",
+    "provider_id": "aws-flightcontrol",
+    "plan_name": "Starter",
+    "price_eur": 14,
+    "price_usd": 16,
+    "storage_gb": 25,
+    "traffic_gb": 200,
+    "domains": 2,
+    "ssl": true,
+    "integration_tags": [
+      "edge",
+      "cdn",
+      "ssl"
+    ],
+    "notes": "Placeholder data for prototype. Replace with real pricing.",
+    "last_verified_at": null
+  },
+  {
+    "id": "aws-sst-starter",
+    "provider_id": "aws-sst",
+    "plan_name": "Starter",
+    "price_eur": 19,
+    "price_usd": 21,
+    "storage_gb": 40,
+    "traffic_gb": 300,
+    "domains": 3,
+    "ssl": true,
+    "integration_tags": [
+      "serverless",
+      "api",
+      "ssl"
+    ],
+    "notes": "Placeholder data for prototype. Replace with real pricing.",
+    "last_verified_at": null
+  },
+  {
+    "id": "azion-starter",
+    "provider_id": "azion",
+    "plan_name": "Starter",
+    "price_eur": 24,
+    "price_usd": 26,
+    "storage_gb": 55,
+    "traffic_gb": 400,
+    "domains": 1,
+    "ssl": true,
+    "integration_tags": [
+      "docker",
+      "ci/cd",
+      "ssl"
+    ],
+    "notes": "Placeholder data for prototype. Replace with real pricing.",
+    "last_verified_at": null
+  },
+  {
+    "id": "buddy-starter",
+    "provider_id": "buddy",
+    "plan_name": "Starter",
+    "price_eur": 29,
+    "price_usd": 31,
+    "storage_gb": 10,
+    "traffic_gb": 500,
+    "domains": 2,
+    "ssl": true,
+    "integration_tags": [
+      "database",
+      "backup",
+      "ssl"
+    ],
+    "notes": "Placeholder data for prototype. Replace with real pricing.",
+    "last_verified_at": null
+  },
+  {
+    "id": "cleavr-starter",
+    "provider_id": "cleavr",
+    "plan_name": "Starter",
+    "price_eur": 9,
+    "price_usd": 11,
+    "storage_gb": 25,
+    "traffic_gb": 600,
+    "domains": 3,
+    "ssl": true,
+    "integration_tags": [
+      "edge",
+      "kv",
+      "ssl"
+    ],
+    "notes": "Placeholder data for prototype. Replace with real pricing.",
+    "last_verified_at": null
+  },
+  {
+    "id": "clever-cloud-starter",
+    "provider_id": "clever-cloud",
+    "plan_name": "Starter",
+    "price_eur": 14,
+    "price_usd": 16,
+    "storage_gb": 40,
+    "traffic_gb": 100,
+    "domains": 1,
+    "ssl": true,
+    "integration_tags": [
+      "git",
+      "ci/cd",
+      "ssl"
+    ],
+    "notes": "Placeholder data for prototype. Replace with real pricing.",
+    "last_verified_at": null
+  },
+  {
+    "id": "cloudflare-starter",
+    "provider_id": "cloudflare",
+    "plan_name": "Starter",
+    "price_eur": 19,
+    "price_usd": 21,
+    "storage_gb": 55,
+    "traffic_gb": 200,
+    "domains": 2,
+    "ssl": true,
+    "integration_tags": [
+      "edge",
+      "cdn",
+      "ssl"
+    ],
+    "notes": "Placeholder data for prototype. Replace with real pricing.",
+    "last_verified_at": null
+  },
+  {
+    "id": "cloudray-starter",
+    "provider_id": "cloudray",
+    "plan_name": "Starter",
+    "price_eur": 24,
+    "price_usd": 26,
+    "storage_gb": 10,
+    "traffic_gb": 300,
+    "domains": 3,
+    "ssl": true,
+    "integration_tags": [
+      "serverless",
+      "api",
+      "ssl"
+    ],
+    "notes": "Placeholder data for prototype. Replace with real pricing.",
+    "last_verified_at": null
+  },
+  {
+    "id": "deno-deploy-starter",
+    "provider_id": "deno-deploy",
+    "plan_name": "Starter",
+    "price_eur": 29,
+    "price_usd": 31,
+    "storage_gb": 25,
+    "traffic_gb": 400,
+    "domains": 1,
+    "ssl": true,
+    "integration_tags": [
+      "docker",
+      "ci/cd",
+      "ssl"
+    ],
+    "notes": "Placeholder data for prototype. Replace with real pricing.",
+    "last_verified_at": null
+  },
+  {
+    "id": "deployhq-starter",
+    "provider_id": "deployhq",
+    "plan_name": "Starter",
+    "price_eur": 9,
+    "price_usd": 11,
+    "storage_gb": 40,
+    "traffic_gb": 500,
+    "domains": 2,
+    "ssl": true,
+    "integration_tags": [
+      "database",
+      "backup",
+      "ssl"
+    ],
+    "notes": "Placeholder data for prototype. Replace with real pricing.",
+    "last_verified_at": null
+  },
+  {
+    "id": "edgeone-pages-starter",
+    "provider_id": "edgeone-pages",
+    "plan_name": "Starter",
+    "price_eur": 14,
+    "price_usd": 16,
+    "storage_gb": 55,
+    "traffic_gb": 600,
+    "domains": 3,
+    "ssl": true,
+    "integration_tags": [
+      "edge",
+      "kv",
+      "ssl"
+    ],
+    "notes": "Placeholder data for prototype. Replace with real pricing.",
+    "last_verified_at": null
+  },
+  {
+    "id": "firebase-starter",
+    "provider_id": "firebase",
+    "plan_name": "Starter",
+    "price_eur": 19,
+    "price_usd": 21,
+    "storage_gb": 10,
+    "traffic_gb": 100,
+    "domains": 1,
+    "ssl": true,
+    "integration_tags": [
+      "git",
+      "ci/cd",
+      "ssl"
+    ],
+    "notes": "Placeholder data for prototype. Replace with real pricing.",
+    "last_verified_at": null
+  },
+  {
+    "id": "fleek-starter",
+    "provider_id": "fleek",
+    "plan_name": "Starter",
+    "price_eur": 24,
+    "price_usd": 26,
+    "storage_gb": 25,
+    "traffic_gb": 200,
+    "domains": 2,
+    "ssl": true,
+    "integration_tags": [
+      "edge",
+      "cdn",
+      "ssl"
+    ],
+    "notes": "Placeholder data for prototype. Replace with real pricing.",
+    "last_verified_at": null
+  },
+  {
+    "id": "fly-io-starter",
+    "provider_id": "fly-io",
+    "plan_name": "Starter",
+    "price_eur": 29,
+    "price_usd": 31,
+    "storage_gb": 40,
+    "traffic_gb": 300,
+    "domains": 3,
+    "ssl": true,
+    "integration_tags": [
+      "serverless",
+      "api",
+      "ssl"
+    ],
+    "notes": "Placeholder data for prototype. Replace with real pricing.",
+    "last_verified_at": null
+  },
+  {
+    "id": "github-pages-starter",
+    "provider_id": "github-pages",
+    "plan_name": "Starter",
+    "price_eur": 9,
+    "price_usd": 11,
+    "storage_gb": 55,
+    "traffic_gb": 400,
+    "domains": 1,
+    "ssl": true,
+    "integration_tags": [
+      "docker",
+      "ci/cd",
+      "ssl"
+    ],
+    "notes": "Placeholder data for prototype. Replace with real pricing.",
+    "last_verified_at": null
+  },
+  {
+    "id": "gitlab-pages-starter",
+    "provider_id": "gitlab-pages",
+    "plan_name": "Starter",
+    "price_eur": 14,
+    "price_usd": 16,
+    "storage_gb": 10,
+    "traffic_gb": 500,
+    "domains": 2,
+    "ssl": true,
+    "integration_tags": [
+      "database",
+      "backup",
+      "ssl"
+    ],
+    "notes": "Placeholder data for prototype. Replace with real pricing.",
+    "last_verified_at": null
+  },
+  {
+    "id": "google-cloud-starter",
+    "provider_id": "google-cloud",
+    "plan_name": "Starter",
+    "price_eur": 19,
+    "price_usd": 21,
+    "storage_gb": 25,
+    "traffic_gb": 600,
+    "domains": 3,
+    "ssl": true,
+    "integration_tags": [
+      "edge",
+      "kv",
+      "ssl"
+    ],
+    "notes": "Placeholder data for prototype. Replace with real pricing.",
+    "last_verified_at": null
+  },
+  {
+    "id": "heroku-starter",
+    "provider_id": "heroku",
+    "plan_name": "Starter",
+    "price_eur": 24,
+    "price_usd": 26,
+    "storage_gb": 40,
+    "traffic_gb": 100,
+    "domains": 1,
+    "ssl": true,
+    "integration_tags": [
+      "git",
+      "ci/cd",
+      "ssl"
+    ],
+    "notes": "Placeholder data for prototype. Replace with real pricing.",
+    "last_verified_at": null
+  },
+  {
+    "id": "juno-starter",
+    "provider_id": "juno",
+    "plan_name": "Starter",
+    "price_eur": 29,
+    "price_usd": 31,
+    "storage_gb": 55,
+    "traffic_gb": 200,
+    "domains": 2,
+    "ssl": true,
+    "integration_tags": [
+      "edge",
+      "cdn",
+      "ssl"
+    ],
+    "notes": "Placeholder data for prototype. Replace with real pricing.",
+    "last_verified_at": null
+  },
+  {
+    "id": "kinsta-starter",
+    "provider_id": "kinsta",
+    "plan_name": "Starter",
+    "price_eur": 9,
+    "price_usd": 11,
+    "storage_gb": 10,
+    "traffic_gb": 300,
+    "domains": 3,
+    "ssl": true,
+    "integration_tags": [
+      "serverless",
+      "api",
+      "ssl"
+    ],
+    "notes": "Placeholder data for prototype. Replace with real pricing.",
+    "last_verified_at": null
+  },
+  {
+    "id": "microsoft-azure-starter",
+    "provider_id": "microsoft-azure",
+    "plan_name": "Starter",
+    "price_eur": 14,
+    "price_usd": 16,
+    "storage_gb": 25,
+    "traffic_gb": 400,
+    "domains": 1,
+    "ssl": true,
+    "integration_tags": [
+      "docker",
+      "ci/cd",
+      "ssl"
+    ],
+    "notes": "Placeholder data for prototype. Replace with real pricing.",
+    "last_verified_at": null
+  },
+  {
+    "id": "netlify-starter",
+    "provider_id": "netlify",
+    "plan_name": "Starter",
+    "price_eur": 19,
+    "price_usd": 21,
+    "storage_gb": 40,
+    "traffic_gb": 500,
+    "domains": 2,
+    "ssl": true,
+    "integration_tags": [
+      "database",
+      "backup",
+      "ssl"
+    ],
+    "notes": "Placeholder data for prototype. Replace with real pricing.",
+    "last_verified_at": null
+  },
+  {
+    "id": "railway-starter",
+    "provider_id": "railway",
+    "plan_name": "Starter",
+    "price_eur": 24,
+    "price_usd": 26,
+    "storage_gb": 55,
+    "traffic_gb": 600,
+    "domains": 3,
+    "ssl": true,
+    "integration_tags": [
+      "edge",
+      "kv",
+      "ssl"
+    ],
+    "notes": "Placeholder data for prototype. Replace with real pricing.",
+    "last_verified_at": null
+  },
+  {
+    "id": "render-starter",
+    "provider_id": "render",
+    "plan_name": "Starter",
+    "price_eur": 29,
+    "price_usd": 31,
+    "storage_gb": 10,
+    "traffic_gb": 100,
+    "domains": 1,
+    "ssl": true,
+    "integration_tags": [
+      "git",
+      "ci/cd",
+      "ssl"
+    ],
+    "notes": "Placeholder data for prototype. Replace with real pricing.",
+    "last_verified_at": null
+  },
+  {
+    "id": "seenode-starter",
+    "provider_id": "seenode",
+    "plan_name": "Starter",
+    "price_eur": 9,
+    "price_usd": 11,
+    "storage_gb": 25,
+    "traffic_gb": 200,
+    "domains": 2,
+    "ssl": true,
+    "integration_tags": [
+      "edge",
+      "cdn",
+      "ssl"
+    ],
+    "notes": "Placeholder data for prototype. Replace with real pricing.",
+    "last_verified_at": null
+  },
+  {
+    "id": "stormkit-starter",
+    "provider_id": "stormkit",
+    "plan_name": "Starter",
+    "price_eur": 14,
+    "price_usd": 16,
+    "storage_gb": 40,
+    "traffic_gb": 300,
+    "domains": 3,
+    "ssl": true,
+    "integration_tags": [
+      "serverless",
+      "api",
+      "ssl"
+    ],
+    "notes": "Placeholder data for prototype. Replace with real pricing.",
+    "last_verified_at": null
+  },
+  {
+    "id": "surge-starter",
+    "provider_id": "surge",
+    "plan_name": "Starter",
+    "price_eur": 19,
+    "price_usd": 21,
+    "storage_gb": 55,
+    "traffic_gb": 400,
+    "domains": 1,
+    "ssl": true,
+    "integration_tags": [
+      "docker",
+      "ci/cd",
+      "ssl"
+    ],
+    "notes": "Placeholder data for prototype. Replace with real pricing.",
+    "last_verified_at": null
+  },
+  {
+    "id": "vercel-starter",
+    "provider_id": "vercel",
+    "plan_name": "Starter",
+    "price_eur": 24,
+    "price_usd": 26,
+    "storage_gb": 10,
+    "traffic_gb": 500,
+    "domains": 2,
+    "ssl": true,
+    "integration_tags": [
+      "database",
+      "backup",
+      "ssl"
+    ],
+    "notes": "Placeholder data for prototype. Replace with real pricing.",
+    "last_verified_at": null
+  },
+  {
+    "id": "zeabur-starter",
+    "provider_id": "zeabur",
+    "plan_name": "Starter",
+    "price_eur": 29,
+    "price_usd": 31,
+    "storage_gb": 25,
+    "traffic_gb": 600,
+    "domains": 3,
+    "ssl": true,
+    "integration_tags": [
+      "edge",
+      "kv",
+      "ssl"
+    ],
+    "notes": "Placeholder data for prototype. Replace with real pricing.",
+    "last_verified_at": null
+  },
+  {
+    "id": "zephyr-cloud-starter",
+    "provider_id": "zephyr-cloud",
+    "plan_name": "Starter",
+    "price_eur": 9,
+    "price_usd": 11,
+    "storage_gb": 40,
+    "traffic_gb": 100,
+    "domains": 1,
+    "ssl": true,
+    "integration_tags": [
+      "git",
+      "ci/cd",
+      "ssl"
+    ],
+    "notes": "Placeholder data for prototype. Replace with real pricing.",
+    "last_verified_at": null
+  },
+  {
+    "id": "zerops-starter",
+    "provider_id": "zerops",
+    "plan_name": "Starter",
+    "price_eur": 14,
+    "price_usd": 16,
+    "storage_gb": 55,
+    "traffic_gb": 200,
+    "domains": 2,
+    "ssl": true,
+    "integration_tags": [
+      "edge",
+      "cdn",
+      "ssl"
+    ],
+    "notes": "Placeholder data for prototype. Replace with real pricing.",
+    "last_verified_at": null
+  }
+]

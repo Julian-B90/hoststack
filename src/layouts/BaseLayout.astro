@@ -1,0 +1,64 @@
+---
+import '../styles/global.css';
+
+const { lang, title, strings } = Astro.props;
+const basePath = lang === 'de' ? '/de' : '/en';
+const otherLang = lang === 'de' ? 'en' : 'de';
+const otherPath = otherLang === 'de' ? '/de' : '/en';
+const currentPath = Astro.url.pathname || basePath;
+const switchedPath = currentPath.startsWith(basePath)
+  ? currentPath.replace(basePath, otherPath)
+  : otherPath;
+---
+<!doctype html>
+<html lang={lang} data-currency="eur">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+  </head>
+  <body class="gradient-bg min-h-screen">
+    <div class="mx-auto flex min-h-screen w-full max-w-6xl flex-col px-6 pb-16 pt-10">
+      <header class="flex flex-wrap items-center justify-between gap-4">
+        <a href={basePath} class="badge">HostStack</a>
+        <nav class="flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.2em]">
+          <a href={`${basePath}/compare`} class="btn-outline">{strings.nav_compare}</a>
+          <a href={`${basePath}/providers`} class="btn-outline">{strings.nav_providers}</a>
+        </nav>
+        <div class="flex items-center gap-3">
+          <button
+            id="currency-toggle"
+            class="btn-outline"
+            type="button"
+            data-currency="eur"
+            aria-label="Toggle currency"
+          >
+            EUR / USD
+          </button>
+          <a href={switchedPath} class="btn-outline" aria-label="Switch language">
+            {otherLang.toUpperCase()}
+          </a>
+        </div>
+      </header>
+      <main class="mt-10 flex-1">
+        <slot />
+      </main>
+      <footer class="mt-16 text-xs uppercase tracking-[0.2em] text-ink/60">
+        {strings.footer_note}
+      </footer>
+    </div>
+    <script>
+      const currencyToggle = document.getElementById('currency-toggle');
+      const preferredCurrency = localStorage.getItem('currency') || 'eur';
+      document.documentElement.dataset.currency = preferredCurrency;
+      if (currencyToggle) {
+        currencyToggle.addEventListener('click', () => {
+          const next = document.documentElement.dataset.currency === 'eur' ? 'usd' : 'eur';
+          document.documentElement.dataset.currency = next;
+          localStorage.setItem('currency', next);
+          window.dispatchEvent(new CustomEvent('currency-change', { detail: next }));
+        });
+      }
+    </script>
+  </body>
+</html>

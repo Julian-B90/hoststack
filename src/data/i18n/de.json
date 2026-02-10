@@ -1,0 +1,12 @@
+{
+  "nav_compare": "Vergleichen",
+  "nav_providers": "Anbieter",
+  "hero_title": "Hosting vergleichen, ohne Rauschen.",
+  "hero_subtitle": "Finde das passende Hosting nach Preis, Ressourcen und Features. Fokus auf DACH, aber global erweiterbar.",
+  "cta_primary": "Jetzt vergleichen",
+  "cta_secondary": "Anbieter entdecken",
+  "section_compare_title": "Vergleich auf einen Blick",
+  "section_compare_subtitle": "Filtere nach Preis, Speicher, Traffic, Domains, SSL und Integrationen.",
+  "empty_plans": "Noch keine Plandaten. Ergänze zuerst Angebote in plans.json.",
+  "footer_note": "Affiliate-Links können Provisionen generieren."
+}

@@ -1,0 +1,12 @@
+{
+  "nav_compare": "Compare",
+  "nav_providers": "Providers",
+  "hero_title": "Compare hosting without the noise.",
+  "hero_subtitle": "Find the right hosting by price, resources, and features. DACH-first, expandable globally.",
+  "cta_primary": "Compare now",
+  "cta_secondary": "Explore providers",
+  "section_compare_title": "Comparison at a glance",
+  "section_compare_subtitle": "Filter by price, storage, traffic, domains, SSL, and integrations.",
+  "empty_plans": "No plan data yet. Add offers to plans.json first.",
+  "footer_note": "Affiliate links may generate commissions."
+}

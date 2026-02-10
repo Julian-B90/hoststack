@@ -1,0 +1,144 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import strings from '../../../data/i18n/de.json';
+import providers from '../../../data/providers.json';
+import plans from '../../../data/plans.json';
+
+export function getStaticPaths() {
+  return providers.map((provider) => ({
+    params: { slug: provider.slug },
+    props: { provider },
+  }));
+}
+
+const { provider } = Astro.props;
+const providerPlans = plans.filter((plan) => plan.provider_id === provider.id);
+const planCount = providerPlans.length;
+const priceEur = providerPlans.map((p) => p.price_eur).filter((v) => typeof v === 'number');
+const priceUsd = providerPlans.map((p) => p.price_usd).filter((v) => typeof v === 'number');
+const minEur = priceEur.length ? Math.min(...priceEur) : null;
+const maxEur = priceEur.length ? Math.max(...priceEur) : null;
+const minUsd = priceUsd.length ? Math.min(...priceUsd) : null;
+const maxUsd = priceUsd.length ? Math.max(...priceUsd) : null;
+const integrations = Array.from(
+  new Set(providerPlans.flatMap((p) => Array.isArray(p.integration_tags) ? p.integration_tags : []))
+).sort();
+---
+<BaseLayout lang="de" title={`HostStack - ${provider.name}`} strings={strings}>
+  <section class="card">
+    <div class="flex flex-wrap items-center justify-between gap-6">
+      <div class="flex items-center gap-4">
+        <div class="flex h-14 w-14 items-center justify-center rounded-2xl border border-ink/10 bg-white text-xs uppercase tracking-[0.2em] text-ink/50">
+          {provider.logo ? (
+            <img src={provider.logo} alt={`${provider.name} logo`} class="h-9 w-9 object-contain" />
+          ) : (
+            provider.name.slice(0, 2)
+          )}
+        </div>
+        <div>
+          <p class="badge">Anbieter</p>
+          <h1 class="mt-3 text-3xl font-display uppercase tracking-[0.1em]">{provider.name}</h1>
+          {provider.short_desc && <p class="mt-2 text-ink/70">{provider.short_desc}</p>}
+        </div>
+      </div>
+      <div class="flex flex-wrap items-center gap-3">
+        {provider.affiliate_url && (
+          <a class="btn" href={provider.affiliate_url} rel="sponsored noopener" target="_blank">
+            Anbieter besuchen
+          </a>
+        )}
+        <a class="btn-outline" href="/de/compare">Vergleich öffnen</a>
+      </div>
+    </div>
+
+    <div class="mt-8 grid gap-4 md:grid-cols-3">
+      <div class="rounded-2xl border border-ink/10 px-4 py-3">
+        <p class="text-xs uppercase tracking-[0.2em] text-ink/60">Region</p>
+        <p class="mt-2 text-lg font-semibold">{provider.region || 'global'}</p>
+      </div>
+      <div class="rounded-2xl border border-ink/10 px-4 py-3">
+        <p class="text-xs uppercase tracking-[0.2em] text-ink/60">Pläne</p>
+        <p class="mt-2 text-lg font-semibold">{planCount}</p>
+      </div>
+      <div class="rounded-2xl border border-ink/10 px-4 py-3">
+        <p class="text-xs uppercase tracking-[0.2em] text-ink/60">Preisrange</p>
+        <p class="mt-2 text-lg font-semibold">
+          <span class="price-range" data-eur-min={minEur ?? ''} data-eur-max={maxEur ?? ''} data-usd-min={minUsd ?? ''} data-usd-max={maxUsd ?? ''}></span>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="mt-8 card">
+    <h2 class="text-lg font-semibold">Integrationen</h2>
+    {integrations.length === 0 && (
+      <p class="mt-3 text-ink/70">Noch keine Integrationen erfasst.</p>
+    )}
+    {integrations.length > 0 && (
+      <div class="mt-4 flex flex-wrap gap-2 text-xs text-ink/70">
+        {integrations.map((tag) => (
+          <span class="rounded-full border border-ink/10 px-3 py-1" key={tag}>{tag}</span>
+        ))}
+      </div>
+    )}
+  </section>
+
+  <section class="mt-8 card">
+    <h2 class="text-lg font-semibold">Angebote</h2>
+    {providerPlans.length === 0 && (
+      <p class="mt-3 text-ink/70">Noch keine Plandaten vorhanden.</p>
+    )}
+    {providerPlans.length > 0 && (
+      <ul class="mt-4 grid gap-4 md:grid-cols-2">
+        {providerPlans.map((plan) => (
+          <li class="rounded-xl border border-ink/10 p-4" key={plan.id}>
+            <div class="flex items-center justify-between">
+              <h3 class="font-semibold">{plan.plan_name}</h3>
+              <span class="text-sm text-ink/70 price" data-eur={plan.price_eur ?? ''} data-usd={plan.price_usd ?? ''}></span>
+            </div>
+            <p class="mt-2 text-sm text-ink/70">Speicher: {plan.storage_gb ?? '-'} GB</p>
+            <p class="text-sm text-ink/70">Traffic: {plan.traffic_gb ?? '-'} GB</p>
+            <p class="text-sm text-ink/70">Domains: {plan.domains ?? '-'}</p>
+            <p class="text-sm text-ink/70">SSL: {plan.ssl ? 'Ja' : 'Nein'}</p>
+            {plan.integration_tags?.length > 0 && (
+              <p class="mt-2 text-xs uppercase tracking-[0.2em] text-ink/50">
+                {plan.integration_tags.join(' · ')}
+              </p>
+            )}
+          </li>
+        ))}
+      </ul>
+    )}
+  </section>
+
+  <script>
+    function formatRange(el) {
+      const currency = document.documentElement.dataset.currency || 'eur';
+      const min = el.dataset[currency === 'eur' ? 'eurMin' : 'usdMin'];
+      const max = el.dataset[currency === 'eur' ? 'eurMax' : 'usdMax'];
+      if (!min && !max) {
+        el.textContent = '-';
+        return;
+      }
+      const prefix = currency === 'eur' ? '€' : '$';
+      if (min && max && min !== max) {
+        el.textContent = `${prefix}${min} – ${prefix}${max}`;
+        return;
+      }
+      el.textContent = `${prefix}${min || max}`;
+    }
+
+    function formatPrices() {
+      document.querySelectorAll('.price').forEach((el) => {
+        const currency = document.documentElement.dataset.currency || 'eur';
+        const value = el.dataset[currency === 'eur' ? 'eur' : 'usd'];
+        el.textContent = value ? `${currency === 'eur' ? '€' : '$'}${value}` : '-';
+      });
+      const range = document.querySelector('.price-range');
+      if (range) formatRange(range);
+    }
+
+    window.addEventListener('currency-change', formatPrices);
+    formatPrices();
+  </script>
+</BaseLayout>

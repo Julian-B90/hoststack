@@ -1,0 +1,48 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import strings from '../../data/i18n/de.json';
+import providers from '../../data/providers.json';
+
+const basePath = '/de';
+---
+<BaseLayout lang="de" title="HostStack - Hosting Vergleich" strings={strings}>
+  <section class="grid gap-8 md:grid-cols-[1.2fr_0.8fr]">
+    <div class="card">
+      <p class="badge">DACH · Hosting Vergleich</p>
+      <h1 class="mt-6 text-4xl font-display uppercase tracking-[0.1em] md:text-5xl">
+        {strings.hero_title}
+      </h1>
+      <p class="mt-4 text-base text-ink/70">
+        {strings.hero_subtitle}
+      </p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href={`${basePath}/compare`} class="btn">{strings.cta_primary}</a>
+        <a href={`${basePath}/providers/aws`} class="btn-outline">{strings.cta_secondary}</a>
+      </div>
+    </div>
+    <div class="card">
+      <h2 class="text-sm uppercase tracking-[0.2em] text-ink/60">Anbieter</h2>
+      <ul class="mt-4 grid grid-cols-2 gap-3 text-sm">
+        {providers.slice(0, 10).map((provider) => (
+          <li class="rounded-xl border border-ink/10 px-3 py-2" key={provider.id}>
+            {provider.name}
+          </li>
+        ))}
+      </ul>
+      <p class="mt-4 text-xs text-ink/50">+ {providers.length - 10} weitere</p>
+    </div>
+  </section>
+
+  <section class="mt-12 card">
+    <h2 class="text-2xl font-semibold">{strings.section_compare_title}</h2>
+    <p class="mt-2 text-ink/70">{strings.section_compare_subtitle}</p>
+    <div class="mt-6 flex flex-wrap gap-3">
+      <span class="badge">Preis</span>
+      <span class="badge">Speicher</span>
+      <span class="badge">Traffic</span>
+      <span class="badge">Domains</span>
+      <span class="badge">SSL</span>
+      <span class="badge">Integration</span>
+    </div>
+  </section>
+</BaseLayout>
