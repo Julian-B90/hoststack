@@ -8,8 +8,9 @@
     "preview": "astro preview"
   },
   "dependencies": {
-    "astro": "^5.17.1",
-    "@astrojs/tailwind": "^6.0.2"
+    "@astrojs/tailwind": "^6.0.2",
+    "@tailwindcss/vite": "^4.1.18",
+    "astro": "^5.17.1"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.24",
