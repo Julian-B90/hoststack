@@ -1,0 +1,673 @@
+---
+import type { ProviderIndexItem } from '../lib/providerIndex';
+
+const {
+  lang,
+  providersIndex,
+  strings,
+  basePath,
+} = Astro.props as {
+  lang: 'de' | 'en';
+  providersIndex: ProviderIndexItem[];
+  strings: Record<string, string>;
+  basePath: string;
+};
+
+const regions = Array.from(new Set(providersIndex.map((provider) => provider.region || 'global'))).sort();
+const integrations = Array.from(
+  new Set(providersIndex.flatMap((provider) => provider.integration_tags || []))
+).sort();
+---
+<section class="mt-6 card">
+  <div class="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+    <label class="text-sm">
+      <span class="block text-xs uppercase tracking-[0.2em] text-ink/60">{strings.providers_search_label}</span>
+      <input
+        id="provider-search"
+        type="text"
+        placeholder={strings.providers_search_placeholder}
+        class="mt-2 w-full rounded-xl border border-ink/10 px-3 py-2"
+      />
+    </label>
+
+    <label class="text-sm">
+      <span class="block text-xs uppercase tracking-[0.2em] text-ink/60">{strings.providers_filter_region}</span>
+      <select id="provider-filter-region" class="mt-2 w-full rounded-xl border border-ink/10 px-3 py-2">
+        <option value="all">{strings.providers_option_all}</option>
+        {regions.map((region) => (
+          <option value={region}>{region.toUpperCase()}</option>
+        ))}
+      </select>
+    </label>
+
+    <label class="text-sm">
+      <span class="block text-xs uppercase tracking-[0.2em] text-ink/60">{strings.providers_filter_logo}</span>
+      <select id="provider-filter-logo" class="mt-2 w-full rounded-xl border border-ink/10 px-3 py-2">
+        <option value="any">{strings.providers_option_any}</option>
+        <option value="with">{strings.providers_option_logo_with}</option>
+        <option value="without">{strings.providers_option_logo_without}</option>
+      </select>
+    </label>
+
+    <div class="text-sm">
+      <span class="block text-xs uppercase tracking-[0.2em] text-ink/60">{strings.providers_filter_integration}</span>
+      <div id="provider-integration-tags" class="mt-2 flex flex-wrap gap-2"></div>
+      <button id="provider-integration-clear" type="button" class="mt-2 btn-outline">
+        {strings.providers_option_all}
+      </button>
+    </div>
+
+    <label class="text-sm">
+      <span class="block text-xs uppercase tracking-[0.2em] text-ink/60">{strings.providers_filter_ssl}</span>
+      <select id="provider-filter-ssl" class="mt-2 w-full rounded-xl border border-ink/10 px-3 py-2">
+        <option value="any">{strings.providers_option_any}</option>
+        <option value="yes">{strings.providers_option_ssl_yes}</option>
+      </select>
+    </label>
+
+    <label class="text-sm">
+      <span class="block text-xs uppercase tracking-[0.2em] text-ink/60">{strings.providers_sort_label}</span>
+      <select id="provider-sort" class="mt-2 w-full rounded-xl border border-ink/10 px-3 py-2">
+        <option value="price">{strings.providers_sort_price}</option>
+        <option value="name">{strings.providers_sort_name}</option>
+        <option value="plans">{strings.providers_sort_plans}</option>
+      </select>
+    </label>
+  </div>
+
+  <div class="mt-5 grid gap-3 md:grid-cols-2">
+    <label class="text-sm">
+      <span class="block text-xs uppercase tracking-[0.2em] text-ink/60">{strings.providers_filter_price_min}</span>
+      <input id="provider-price-min" type="range" class="mt-2 w-full" />
+      <span id="provider-price-min-label" class="mt-1 block text-xs text-ink/60"></span>
+    </label>
+    <label class="text-sm">
+      <span class="block text-xs uppercase tracking-[0.2em] text-ink/60">{strings.providers_filter_price_max}</span>
+      <input id="provider-price-max" type="range" class="mt-2 w-full" />
+      <span id="provider-price-max-label" class="mt-1 block text-xs text-ink/60"></span>
+    </label>
+  </div>
+
+  <div class="mt-5 flex flex-wrap items-center justify-between gap-3">
+    <p id="provider-results-count" class="text-sm text-ink/70"></p>
+    <button id="provider-reset" type="button" class="btn-outline">{strings.providers_reset}</button>
+  </div>
+</section>
+
+<section class="mt-6">
+  <div id="provider-results" class="grid gap-4 md:gap-5 md:grid-cols-2"></div>
+  <div id="provider-empty" class="card hidden">
+    <p class="text-sm text-ink/70">{strings.providers_empty}</p>
+  </div>
+  <nav id="provider-pagination" class="mt-6 flex flex-wrap items-center justify-center gap-2"></nav>
+</section>
+
+<script id="provider-data" type="application/json" set:html={JSON.stringify(providersIndex)}></script>
+<script id="provider-strings" type="application/json" set:html={JSON.stringify(strings)}></script>
+<script id="provider-meta" type="application/json" set:html={JSON.stringify({ lang, basePath, regions, integrations })}></script>
+
+<script is:inline>
+  (() => {
+    const providers = JSON.parse(document.getElementById('provider-data')?.textContent || '[]');
+    const strings = JSON.parse(document.getElementById('provider-strings')?.textContent || '{}');
+    const meta = JSON.parse(document.getElementById('provider-meta')?.textContent || '{}');
+
+    const searchInput = document.getElementById('provider-search');
+    const regionSelect = document.getElementById('provider-filter-region');
+    const logoSelect = document.getElementById('provider-filter-logo');
+    const integrationTags = document.getElementById('provider-integration-tags');
+    const integrationClearButton = document.getElementById('provider-integration-clear');
+    const sslSelect = document.getElementById('provider-filter-ssl');
+    const sortSelect = document.getElementById('provider-sort');
+    const priceMinInput = document.getElementById('provider-price-min');
+    const priceMaxInput = document.getElementById('provider-price-max');
+    const priceMinLabel = document.getElementById('provider-price-min-label');
+    const priceMaxLabel = document.getElementById('provider-price-max-label');
+    const resultsCount = document.getElementById('provider-results-count');
+    const resetButton = document.getElementById('provider-reset');
+    const results = document.getElementById('provider-results');
+    const emptyState = document.getElementById('provider-empty');
+    const pagination = document.getElementById('provider-pagination');
+
+    const pageSize = 12;
+    const validRegions = new Set(['all', ...(meta.regions || [])]);
+    const validIntegrations = new Set(meta.integrations || []);
+
+    const defaults = {
+      q: '',
+      region: 'all',
+      logo: 'any',
+      integrations: [],
+      ssl: 'any',
+      sort: 'price',
+      page: 1,
+    };
+
+    const state = {
+      ...defaults,
+      priceMin: null,
+      priceMax: null,
+      priceBounds: null,
+    };
+
+    function getCurrency() {
+      return document.documentElement.dataset.currency === 'usd' ? 'usd' : 'eur';
+    }
+
+    function getPrice(item, currency) {
+      return currency === 'eur' ? item.min_price_eur : item.min_price_usd;
+    }
+
+    function getPriceBounds(currency) {
+      const values = providers
+        .map((item) => getPrice(item, currency))
+        .filter((value) => typeof value === 'number');
+      if (values.length === 0) {
+        return null;
+      }
+      return {
+        min: Math.floor(Math.min(...values)),
+        max: Math.ceil(Math.max(...values)),
+      };
+    }
+
+    function clamp(value, min, max) {
+      return Math.min(Math.max(value, min), max);
+    }
+
+    function formatCurrency(value, currency) {
+      if (typeof value !== 'number') {
+        return strings.providers_price_unavailable;
+      }
+      return currency === 'eur' ? `EUR ${value}` : `USD ${value}`;
+    }
+
+    function getDefaultPriceState(bounds) {
+      if (!bounds) {
+        return { min: null, max: null };
+      }
+      return { min: bounds.min, max: bounds.max };
+    }
+
+    function sanitizeStateFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      const currency = getCurrency();
+      const bounds = getPriceBounds(currency);
+
+      state.q = (params.get('q') || defaults.q).trim();
+      state.region = validRegions.has(params.get('region') || '') ? params.get('region') : defaults.region;
+      state.logo = ['any', 'with', 'without'].includes(params.get('logo') || '')
+        ? params.get('logo')
+        : defaults.logo;
+      const rawIntegration = (params.get('integration') || '').trim();
+      const requestedIntegrations = rawIntegration
+        ? rawIntegration.split(',').map((value) => value.trim()).filter(Boolean)
+        : [];
+      state.integrations = requestedIntegrations.filter((value, index, list) =>
+        validIntegrations.has(value) && list.indexOf(value) === index
+      );
+      state.ssl = ['any', 'yes'].includes(params.get('ssl') || '') ? params.get('ssl') : defaults.ssl;
+      state.sort = ['price', 'name', 'plans'].includes(params.get('sort') || '')
+        ? params.get('sort')
+        : defaults.sort;
+
+      const requestedPage = parseInt(params.get('page') || '', 10);
+      state.page = Number.isFinite(requestedPage) && requestedPage > 0 ? requestedPage : defaults.page;
+
+      state.priceBounds = bounds;
+      const defaultsForBounds = getDefaultPriceState(bounds);
+
+      if (!bounds) {
+        state.priceMin = null;
+        state.priceMax = null;
+      } else {
+        const priceMin = parseInt(params.get('priceMin') || '', 10);
+        const priceMax = parseInt(params.get('priceMax') || '', 10);
+
+        const safeMin = Number.isFinite(priceMin) ? clamp(priceMin, bounds.min, bounds.max) : defaultsForBounds.min;
+        const safeMax = Number.isFinite(priceMax) ? clamp(priceMax, bounds.min, bounds.max) : defaultsForBounds.max;
+
+        state.priceMin = Math.min(safeMin, safeMax);
+        state.priceMax = Math.max(safeMin, safeMax);
+      }
+    }
+
+    function applyControlsFromState() {
+      searchInput.value = state.q;
+      regionSelect.value = state.region;
+      logoSelect.value = state.logo;
+      sslSelect.value = state.ssl;
+      sortSelect.value = state.sort;
+      renderIntegrationTags();
+
+      if (!state.priceBounds) {
+        priceMinInput.disabled = true;
+        priceMaxInput.disabled = true;
+        priceMinInput.min = '0';
+        priceMinInput.max = '0';
+        priceMaxInput.min = '0';
+        priceMaxInput.max = '0';
+        priceMinInput.value = '0';
+        priceMaxInput.value = '0';
+        priceMinLabel.textContent = strings.providers_price_unavailable;
+        priceMaxLabel.textContent = strings.providers_price_unavailable;
+        return;
+      }
+
+      const currency = getCurrency();
+      priceMinInput.disabled = false;
+      priceMaxInput.disabled = false;
+      priceMinInput.min = String(state.priceBounds.min);
+      priceMinInput.max = String(state.priceBounds.max);
+      priceMaxInput.min = String(state.priceBounds.min);
+      priceMaxInput.max = String(state.priceBounds.max);
+      priceMinInput.value = String(state.priceMin);
+      priceMaxInput.value = String(state.priceMax);
+      priceMinLabel.textContent = formatCurrency(state.priceMin, currency);
+      priceMaxLabel.textContent = formatCurrency(state.priceMax, currency);
+    }
+
+    function isPriceFilterActive() {
+      if (!state.priceBounds) {
+        return false;
+      }
+      return state.priceMin !== state.priceBounds.min || state.priceMax !== state.priceBounds.max;
+    }
+
+    function getFilteredProviders() {
+      const search = state.q.toLowerCase();
+      const currency = getCurrency();
+      const priceActive = isPriceFilterActive();
+
+      return providers.filter((item) => {
+        if (search) {
+          const haystack = [item.name, item.short_desc, item.slug].join(' ').toLowerCase();
+          if (!haystack.includes(search)) {
+            return false;
+          }
+        }
+
+        const region = (item.region || 'global').toLowerCase();
+        if (state.region !== 'all' && region !== state.region) {
+          return false;
+        }
+
+        if (state.logo === 'with' && !item.has_logo) {
+          return false;
+        }
+
+        if (state.logo === 'without' && item.has_logo) {
+          return false;
+        }
+
+        if (state.integrations.length > 0 && !state.integrations.every((tag) => item.integration_tags.includes(tag))) {
+          return false;
+        }
+
+        if (state.ssl === 'yes' && !item.has_ssl) {
+          return false;
+        }
+
+        if (priceActive) {
+          const price = getPrice(item, currency);
+          if (typeof price !== 'number') {
+            return false;
+          }
+          return price >= state.priceMin && price <= state.priceMax;
+        }
+
+        return true;
+      });
+    }
+
+    function getSortedProviders(items) {
+      const currency = getCurrency();
+      if (state.sort === 'name') {
+        return [...items].sort((a, b) => a.name.localeCompare(b.name));
+      }
+      if (state.sort === 'plans') {
+        return [...items].sort((a, b) => {
+          if (b.plan_count !== a.plan_count) {
+            return b.plan_count - a.plan_count;
+          }
+          return a.name.localeCompare(b.name);
+        });
+      }
+
+      return [...items].sort((a, b) => {
+        const ap = getPrice(a, currency);
+        const bp = getPrice(b, currency);
+        if (ap === null && bp === null) {
+          return a.name.localeCompare(b.name);
+        }
+        if (ap === null) {
+          return 1;
+        }
+        if (bp === null) {
+          return -1;
+        }
+        if (ap !== bp) {
+          return ap - bp;
+        }
+        return a.name.localeCompare(b.name);
+      });
+    }
+
+    function paginateItems(items) {
+      const pageCount = Math.max(1, Math.ceil(items.length / pageSize));
+      state.page = clamp(state.page, 1, pageCount);
+      const start = (state.page - 1) * pageSize;
+      return {
+        pageItems: items.slice(start, start + pageSize),
+        total: items.length,
+        pageCount,
+      };
+    }
+
+    function getVisiblePages(page, pageCount) {
+      if (pageCount <= 7) {
+        return Array.from({ length: pageCount }, (_, idx) => idx + 1);
+      }
+      let start = Math.max(1, page - 3);
+      let end = Math.min(pageCount, start + 6);
+      if (end - start < 6) {
+        start = Math.max(1, end - 6);
+      }
+      const pages = [];
+      for (let value = start; value <= end; value += 1) {
+        pages.push(value);
+      }
+      return pages;
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function renderCards(pageItems) {
+      const currency = getCurrency();
+      results.innerHTML = pageItems
+        .map((provider) => {
+          const note = meta.lang === 'de' ? provider.logo_note_de : provider.logo_note_en;
+          const price = getPrice(provider, currency);
+          return `
+            <a class="card flex items-center gap-4 transition hover:-translate-y-1" href="${meta.basePath}/${escapeHtml(provider.slug)}">
+              <div class="flex h-12 w-12 items-center justify-center rounded-2xl border border-ink/10 bg-white text-xs uppercase tracking-[0.2em] text-ink/50">
+                ${provider.logo
+                  ? `<img src="${escapeHtml(provider.logo)}" alt="${escapeHtml(provider.name)} logo" class="h-8 w-8 object-contain" />`
+                  : escapeHtml(provider.name.slice(0, 2))}
+              </div>
+              <div>
+                <div class="flex items-center gap-3">
+                  <h2 class="text-lg font-semibold">${escapeHtml(provider.name)}</h2>
+                  <span class="rounded-full border border-ink/10 px-2 py-0.5 text-[10px] uppercase tracking-[0.2em] text-ink/60">${escapeHtml(provider.region || 'global')}</span>
+                </div>
+                ${note ? `<p class="mt-1 text-[10px] uppercase tracking-[0.2em] text-ink/50">${escapeHtml(note)}</p>` : ''}
+                <p class="mt-2 text-sm text-ink/70">${escapeHtml(provider.short_desc || '')}</p>
+                <div class="mt-3 flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.2em] text-ink/60">
+                  <span>${escapeHtml(strings.providers_plan_count.replace('{count}', String(provider.plan_count)))}</span>
+                  <span>${escapeHtml(strings.providers_price_from.replace('{price}', formatCurrency(price, currency)))}</span>
+                </div>
+              </div>
+            </a>
+          `;
+        })
+        .join('');
+    }
+
+    function renderPagination(pageCount) {
+      if (pageCount <= 1) {
+        pagination.innerHTML = '';
+        return;
+      }
+
+      const pages = getVisiblePages(state.page, pageCount);
+      const prevDisabled = state.page <= 1 ? 'disabled' : '';
+      const nextDisabled = state.page >= pageCount ? 'disabled' : '';
+
+      const pageButtons = pages
+        .map((page) => {
+          const activeClass = page === state.page
+            ? 'bg-ink text-sand border-ink'
+            : 'bg-white text-ink border-ink/10 hover:border-ink/40';
+          return `<button type="button" data-page="${page}" class="rounded-full border px-3 py-2 text-xs uppercase tracking-[0.2em] ${activeClass}">${page}</button>`;
+        })
+        .join('');
+
+      pagination.innerHTML = `
+        <button type="button" data-nav="prev" ${prevDisabled} class="btn-outline disabled:cursor-not-allowed disabled:opacity-50">${escapeHtml(strings.providers_pagination_prev)}</button>
+        ${pageButtons}
+        <button type="button" data-nav="next" ${nextDisabled} class="btn-outline disabled:cursor-not-allowed disabled:opacity-50">${escapeHtml(strings.providers_pagination_next)}</button>
+      `;
+    }
+
+    function updateUrl(push) {
+      const params = new URLSearchParams();
+      if (state.q) params.set('q', state.q);
+      if (state.region !== defaults.region) params.set('region', state.region);
+      if (state.logo !== defaults.logo) params.set('logo', state.logo);
+      if (state.integrations.length > 0) {
+        params.set('integration', state.integrations.join(','));
+      }
+      if (state.ssl !== defaults.ssl) params.set('ssl', state.ssl);
+      if (state.sort !== defaults.sort) params.set('sort', state.sort);
+      if (state.page > 1) params.set('page', String(state.page));
+      if (state.priceBounds && isPriceFilterActive()) {
+        params.set('priceMin', String(state.priceMin));
+        params.set('priceMax', String(state.priceMax));
+      }
+
+      const query = params.toString();
+      const nextUrl = query ? `${window.location.pathname}?${query}` : window.location.pathname;
+      const currentUrl = `${window.location.pathname}${window.location.search}`;
+      if (nextUrl === currentUrl) {
+        return;
+      }
+
+      const fn = push ? 'pushState' : 'replaceState';
+      window.history[fn]({}, '', nextUrl);
+    }
+
+    function render(pushUrl) {
+      applyControlsFromState();
+      const filtered = getFilteredProviders();
+      const sorted = getSortedProviders(filtered);
+      const { pageItems, total, pageCount } = paginateItems(sorted);
+
+      if (total === 0) {
+        results.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        pagination.innerHTML = '';
+      } else {
+        emptyState.classList.add('hidden');
+        renderCards(pageItems);
+        renderPagination(pageCount);
+      }
+
+      resultsCount.textContent = strings.providers_results_count.replace('{count}', String(total));
+      if (pushUrl !== null) {
+        updateUrl(pushUrl);
+      }
+    }
+
+    function updateState(partial, options = {}) {
+      const { push = true, resetPage = false } = options;
+      Object.assign(state, partial);
+      if (resetPage) {
+        state.page = 1;
+      }
+      render(push);
+    }
+
+    function resetToDefaults() {
+      const bounds = getPriceBounds(getCurrency());
+      const defaultsForBounds = getDefaultPriceState(bounds);
+      state.q = defaults.q;
+      state.region = defaults.region;
+      state.logo = defaults.logo;
+      state.integrations = [...defaults.integrations];
+      state.ssl = defaults.ssl;
+      state.sort = defaults.sort;
+      state.page = defaults.page;
+      state.priceBounds = bounds;
+      state.priceMin = defaultsForBounds.min;
+      state.priceMax = defaultsForBounds.max;
+      render(true);
+    }
+
+    function mapRangeAcrossCurrency(oldBounds, newBounds) {
+      if (!oldBounds || !newBounds) {
+        const fallback = getDefaultPriceState(newBounds);
+        state.priceMin = fallback.min;
+        state.priceMax = fallback.max;
+        return;
+      }
+
+      const oldSpan = oldBounds.max - oldBounds.min;
+      if (oldSpan <= 0) {
+        state.priceMin = newBounds.min;
+        state.priceMax = newBounds.max;
+        return;
+      }
+
+      const minRatio = (state.priceMin - oldBounds.min) / oldSpan;
+      const maxRatio = (state.priceMax - oldBounds.min) / oldSpan;
+
+      const newSpan = newBounds.max - newBounds.min;
+      const mappedMin = Math.round(newBounds.min + newSpan * minRatio);
+      const mappedMax = Math.round(newBounds.min + newSpan * maxRatio);
+
+      state.priceMin = clamp(Math.min(mappedMin, mappedMax), newBounds.min, newBounds.max);
+      state.priceMax = clamp(Math.max(mappedMin, mappedMax), newBounds.min, newBounds.max);
+    }
+
+    function onCurrencyChange() {
+      const oldBounds = state.priceBounds;
+      const newBounds = getPriceBounds(getCurrency());
+      state.priceBounds = newBounds;
+      mapRangeAcrossCurrency(oldBounds, newBounds);
+      state.page = 1;
+      render(false);
+    }
+
+    searchInput.addEventListener('input', (event) => {
+      updateState({ q: event.target.value }, { push: false, resetPage: true });
+    });
+
+    regionSelect.addEventListener('change', (event) => {
+      updateState({ region: event.target.value }, { push: true, resetPage: true });
+    });
+
+    logoSelect.addEventListener('change', (event) => {
+      updateState({ logo: event.target.value }, { push: true, resetPage: true });
+    });
+
+    integrationTags.addEventListener('click', (event) => {
+      const target = event.target.closest('button[data-tag]');
+      if (!target) {
+        return;
+      }
+      const tag = target.dataset.tag;
+      if (!tag) {
+        return;
+      }
+      const hasTag = state.integrations.includes(tag);
+      const next = hasTag
+        ? state.integrations.filter((value) => value !== tag)
+        : [...state.integrations, tag];
+      updateState({ integrations: next }, { push: true, resetPage: true });
+    });
+
+    integrationClearButton.addEventListener('click', () => {
+      updateState({ integrations: [] }, { push: true, resetPage: true });
+    });
+
+    sslSelect.addEventListener('change', (event) => {
+      updateState({ ssl: event.target.value }, { push: true, resetPage: true });
+    });
+
+    sortSelect.addEventListener('change', (event) => {
+      updateState({ sort: event.target.value }, { push: true, resetPage: true });
+    });
+
+    function onMinInput(push) {
+      const minValue = parseInt(priceMinInput.value, 10);
+      const maxValue = parseInt(priceMaxInput.value, 10);
+      if (!Number.isFinite(minValue) || !Number.isFinite(maxValue)) {
+        return;
+      }
+      state.priceMin = Math.min(minValue, maxValue);
+      if (state.priceMin !== minValue) {
+        priceMinInput.value = String(state.priceMin);
+      }
+      updateState({}, { push, resetPage: true });
+    }
+
+    function onMaxInput(push) {
+      const minValue = parseInt(priceMinInput.value, 10);
+      const maxValue = parseInt(priceMaxInput.value, 10);
+      if (!Number.isFinite(minValue) || !Number.isFinite(maxValue)) {
+        return;
+      }
+      state.priceMax = Math.max(minValue, maxValue);
+      if (state.priceMax !== maxValue) {
+        priceMaxInput.value = String(state.priceMax);
+      }
+      updateState({}, { push, resetPage: true });
+    }
+
+    priceMinInput.addEventListener('input', () => onMinInput(false));
+    priceMinInput.addEventListener('change', () => onMinInput(true));
+    priceMaxInput.addEventListener('input', () => onMaxInput(false));
+    priceMaxInput.addEventListener('change', () => onMaxInput(true));
+
+    resetButton.addEventListener('click', () => resetToDefaults());
+
+    pagination.addEventListener('click', (event) => {
+      const target = event.target.closest('button');
+      if (!target) {
+        return;
+      }
+
+      const page = target.dataset.page;
+      if (page) {
+        updateState({ page: parseInt(page, 10) }, { push: true, resetPage: false });
+        return;
+      }
+
+      const nav = target.dataset.nav;
+      if (nav === 'prev') {
+        updateState({ page: state.page - 1 }, { push: true, resetPage: false });
+      }
+      if (nav === 'next') {
+        updateState({ page: state.page + 1 }, { push: true, resetPage: false });
+      }
+    });
+
+    window.addEventListener('currency-change', onCurrencyChange);
+    window.addEventListener('popstate', () => {
+      sanitizeStateFromUrl();
+      render(null);
+    });
+
+    sanitizeStateFromUrl();
+    render(false);
+
+    function renderIntegrationTags() {
+      integrationTags.innerHTML = (meta.integrations || [])
+        .map((tag) => {
+          const selected = state.integrations.includes(tag);
+          const selectedClass = selected
+            ? 'bg-ink text-sand border-ink'
+            : 'bg-white text-ink border-ink/10 hover:border-ink/40';
+          return `<button type="button" data-tag="${escapeHtml(tag)}" aria-pressed="${selected ? 'true' : 'false'}" class="rounded-full border px-3 py-1 text-xs uppercase tracking-[0.2em] ${selectedClass}">${escapeHtml(tag)}</button>`;
+        })
+        .join('');
+    }
+  })();
+</script>
