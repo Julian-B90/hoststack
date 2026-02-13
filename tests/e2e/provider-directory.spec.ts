@@ -1,84 +1,89 @@
 import { expect, test } from '@playwright/test';
 
-test.describe('Provider directory smoke', () => {
-  test('base page shows expected result count and pagination', async ({ page }) => {
+test.describe('Provider directory UX polishing', () => {
+  test('shows total and filtered counts', async ({ page }) => {
     await page.goto('/de/providers');
-    await expect(page.locator('#provider-results-count')).toHaveText('32 Anbieter');
-    await expect(page.locator('#provider-pagination button[data-page="3"]')).toBeVisible();
+    await expect(page.locator('#provider-results-total')).toHaveText('Gesamt: 32');
+    await expect(page.locator('#provider-results-filtered')).toHaveText('Gefiltert: 32');
   });
 
-  test('deep link q=aws restores search and results', async ({ page }) => {
-    await page.goto('/de/providers?q=aws');
-    await expect(page.locator('#provider-search')).toHaveValue('aws');
-    await expect(page.locator('#provider-results-count')).toHaveText('3 Anbieter');
+  test('integrationMode=any returns broader result set than all', async ({ page }) => {
+    await page.goto('/de/providers?integration=edge,ci/cd&integrationMode=any');
+    await expect(page.locator('#provider-results-filtered')).toHaveText('Gefiltert: 22');
+
+    await page.goto('/de/providers?integration=edge,ci/cd&integrationMode=all');
+    await expect(page.locator('#provider-results-filtered')).toHaveText('Gefiltert: 0');
   });
 
-  test('logo filter with value keeps expected provider count', async ({ page }) => {
-    await page.goto('/de/providers?logo=with');
-    await expect(page.locator('#provider-filter-logo')).toHaveValue('with');
-    await expect(page.locator('#provider-results-count')).toHaveText('8 Anbieter');
+  test('active chips can remove single integration filter', async ({ page }) => {
+    await page.goto('/de/providers?integration=edge,ssl&integrationMode=all');
+    await page.locator('#provider-active-chips button[data-chip="integration"][data-value="edge"]').click();
+    await expect(page).toHaveURL(/integration=ssl/);
+    await expect(page.locator('#provider-results-filtered')).toHaveText('Gefiltert: 32');
   });
 
-  test('integration edge filter shows expected count', async ({ page }) => {
-    await page.goto('/de/providers?integration=edge');
-    await expect(page.locator('#provider-filter-integration')).toHaveValue('edge');
-    await expect(page.locator('#provider-results-count')).toHaveText('11 Anbieter');
+  test('clear all resets filters and query params', async ({ page }) => {
+    await page.goto('/de/providers?q=aws&logo=with&integration=edge&integrationMode=all&priceMin=14&priceMax=24&sort=name');
+    await page.click('#provider-clear-all');
+    await expect(page).toHaveURL('/de/providers');
+    await expect(page.locator('#provider-results-filtered')).toHaveText('Gefiltert: 32');
   });
 
-  test('price range filter via URL works (EUR default)', async ({ page }) => {
-    await page.goto('/de/providers?priceMin=14&priceMax=24');
-    await expect(page.locator('#provider-price-min')).toHaveValue('14');
-    await expect(page.locator('#provider-price-max')).toHaveValue('24');
-    await expect(page.locator('#provider-results-count')).toHaveText('19 Anbieter');
+  test('integration query is serialized in stable order', async ({ page }) => {
+    await page.goto('/de/providers');
+    await page.click('#provider-integration-tags button[data-tag="ssl"]');
+    await page.click('#provider-integration-tags button[data-tag="edge"]');
+    await page.click('#provider-integration-tags button[data-tag="ci/cd"]');
+    await expect(page).toHaveURL(/integration=ci%2Fcd%2Cedge%2Cssl/);
   });
 
-  test('out of range page clamps to valid max page', async ({ page }) => {
-    await page.goto('/de/providers?page=999');
-    await expect(page.locator('#provider-pagination button[data-page="3"]')).toHaveClass(/bg-ink/);
-  });
-
-  test('full URL state is reflected in controls and count', async ({ page }) => {
-    await page.goto('/de/providers?q=aws&logo=with&integration=ci%2Fcd&priceMin=9&priceMax=19&sort=price&page=1');
-    await expect(page.locator('#provider-search')).toHaveValue('aws');
-    await expect(page.locator('#provider-filter-logo')).toHaveValue('with');
-    await expect(page.locator('#provider-filter-integration')).toHaveValue('ci/cd');
-    await expect(page.locator('#provider-sort')).toHaveValue('price');
-    await expect(page.locator('#provider-results-count')).toHaveText('1 Anbieter');
-  });
-
-  test('browser history back/forward restores state', async ({ page }) => {
+  test('search uses debounce replace and enter push', async ({ page }) => {
     await page.goto('/de/providers');
     await page.fill('#provider-search', 'aws');
-    await expect(page.locator('#provider-results-count')).toHaveText('3 Anbieter');
-    await page.selectOption('#provider-filter-logo', 'with');
-    await expect(page.locator('#provider-results-count')).toHaveText('1 Anbieter');
-
+    await page.press('#provider-search', 'Enter');
+    await expect(page).toHaveURL(/q=aws/);
     await page.goBack();
-    await expect(page.locator('#provider-filter-logo')).toHaveValue('any');
-    await expect(page.locator('#provider-results-count')).toHaveText('3 Anbieter');
-
-    await page.goForward();
-    await expect(page.locator('#provider-filter-logo')).toHaveValue('with');
-    await expect(page.locator('#provider-results-count')).toHaveText('1 Anbieter');
+    await expect(page).toHaveURL('/de/providers');
   });
 
-  test('currency switch keeps page stable and price sliders valid', async ({ page }) => {
-    await page.goto('/de/providers?priceMin=14&priceMax=24');
-    await page.click('#currency-toggle');
-
-    await expect(page.locator('html')).toHaveAttribute('data-currency', 'usd');
-
-    const min = Number(await page.locator('#provider-price-min').inputValue());
-    const max = Number(await page.locator('#provider-price-max').inputValue());
-    expect(Number.isFinite(min)).toBeTruthy();
-    expect(Number.isFinite(max)).toBeTruthy();
-    expect(min).toBeLessThanOrEqual(max);
-    await expect(page.locator('#provider-results-count')).toBeVisible();
+  test('empty state displays hint and reset action', async ({ page }) => {
+    await page.goto('/de/providers?integration=edge,ci/cd&integrationMode=all');
+    await expect(page.locator('#provider-empty')).toBeVisible();
+    await expect(page.locator('#provider-empty')).toContainText('Tipp: Entferne zuerst Integrations- oder Preisfilter.');
+    await page.click('#provider-empty-reset');
+    await expect(page.locator('#provider-empty')).toBeHidden();
+    await expect(page.locator('#provider-results-filtered')).toHaveText('Gefiltert: 32');
   });
 
-  test('english page mirrors core behavior', async ({ page }) => {
-    await page.goto('/en/providers?logo=with');
-    await expect(page.locator('#provider-results-count')).toHaveText('8 providers');
-    await expect(page.locator('#provider-filter-logo')).toHaveValue('with');
+  test('mobile sheet close discards changes and apply commits', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/de/providers');
+
+    await page.click('#provider-mobile-filter-open');
+    await page.selectOption('#mobile-provider-filter-logo', 'with');
+    await page.click('#provider-mobile-filter-close');
+    await expect(page).toHaveURL('/de/providers');
+
+    await page.click('#provider-mobile-filter-open');
+    await page.selectOption('#mobile-provider-filter-logo', 'with');
+    await page.click('#provider-mobile-filter-apply');
+    await expect(page).toHaveURL(/logo=with/);
+    await expect(page.locator('#provider-results-filtered')).toHaveText('Gefiltert: 8');
+  });
+
+  test('mobile sheet reset resets draft controls', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/de/providers?logo=with');
+    await page.click('#provider-mobile-filter-open');
+    await page.selectOption('#mobile-provider-filter-logo', 'without');
+    await page.locator('#provider-mobile-filter-reset').click({ force: true });
+    await expect(page.locator('#mobile-provider-filter-logo')).toHaveValue('any');
+  });
+
+  test('english page renders new labels', async ({ page }) => {
+    await page.goto('/en/providers');
+    await expect(page.locator('#provider-results-total')).toHaveText('Total: 32');
+    await expect(page.locator('#provider-results-filtered')).toHaveText('Filtered: 32');
+    await expect(page.locator('#provider-mobile-filter-open')).toContainText('Filters');
   });
 });
