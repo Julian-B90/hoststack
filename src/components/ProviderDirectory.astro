@@ -57,15 +57,6 @@ const integrations = Array.from(
       </select>
     </label>
 
-    <label class="text-sm">
-      <span class="block text-xs uppercase tracking-[0.2em] text-ink/60">{strings.providers_filter_logo}</span>
-      <select id="provider-filter-logo" class="mt-2 w-full rounded-xl border border-ink/10 px-3 py-2">
-        <option value="any">{strings.providers_option_any}</option>
-        <option value="with">{strings.providers_option_logo_with}</option>
-        <option value="without">{strings.providers_option_logo_without}</option>
-      </select>
-    </label>
-
     <div class="text-sm">
       <span class="block text-xs uppercase tracking-[0.2em] text-ink/60">{strings.providers_filter_integration}</span>
       <div id="provider-integration-tags" class="mt-2 flex flex-wrap gap-2"></div>
@@ -160,15 +151,6 @@ const integrations = Array.from(
           </select>
         </label>
 
-        <label class="text-sm">
-          <span class="block text-xs uppercase tracking-[0.2em] text-ink/60">{strings.providers_filter_logo}</span>
-          <select id="mobile-provider-filter-logo" class="mt-2 w-full rounded-xl border border-ink/10 px-3 py-2">
-            <option value="any">{strings.providers_option_any}</option>
-            <option value="with">{strings.providers_option_logo_with}</option>
-            <option value="without">{strings.providers_option_logo_without}</option>
-          </select>
-        </label>
-
         <div class="text-sm">
           <span class="block text-xs uppercase tracking-[0.2em] text-ink/60">{strings.providers_filter_integration}</span>
           <div id="mobile-provider-integration-tags" class="mt-2 flex flex-wrap gap-2"></div>
@@ -237,7 +219,6 @@ const integrations = Array.from(
     const mobileSearchInput = document.getElementById('provider-mobile-search');
 
     const regionSelect = document.getElementById('provider-filter-region');
-    const logoSelect = document.getElementById('provider-filter-logo');
     const integrationTags = document.getElementById('provider-integration-tags');
     const integrationClearButton = document.getElementById('provider-integration-clear');
     const integrationModeSelect = document.getElementById('provider-integration-mode');
@@ -249,7 +230,6 @@ const integrations = Array.from(
     const priceMaxLabel = document.getElementById('provider-price-max-label');
 
     const mobileRegionSelect = document.getElementById('mobile-provider-filter-region');
-    const mobileLogoSelect = document.getElementById('mobile-provider-filter-logo');
     const mobileIntegrationTags = document.getElementById('mobile-provider-integration-tags');
     const mobileIntegrationClear = document.getElementById('mobile-provider-integration-clear');
     const mobileIntegrationMode = document.getElementById('mobile-provider-integration-mode');
@@ -289,7 +269,6 @@ const integrations = Array.from(
     const defaults = {
       q: '',
       region: 'all',
-      logo: 'any',
       integrations: [],
       integrationMode: 'any',
       ssl: 'any',
@@ -346,7 +325,6 @@ const integrations = Array.from(
 
       state.q = (params.get('q') || defaults.q).trim();
       state.region = validRegions.has(params.get('region') || '') ? params.get('region') : defaults.region;
-      state.logo = ['any', 'with', 'without'].includes(params.get('logo') || '') ? params.get('logo') : defaults.logo;
       state.ssl = ['any', 'yes'].includes(params.get('ssl') || '') ? params.get('ssl') : defaults.ssl;
       state.sort = ['price', 'name', 'plans'].includes(params.get('sort') || '') ? params.get('sort') : defaults.sort;
       state.integrationMode = ['any', 'all'].includes(params.get('integrationMode') || '')
@@ -392,9 +370,6 @@ const integrations = Array.from(
 
         const region = (item.region || 'global').toLowerCase();
         if (sourceState.region !== 'all' && region !== sourceState.region) return false;
-
-        if (sourceState.logo === 'with' && !item.has_logo) return false;
-        if (sourceState.logo === 'without' && item.has_logo) return false;
 
         if (sourceState.integrations.length > 0) {
           if (sourceState.integrationMode === 'any') {
@@ -503,7 +478,6 @@ const integrations = Array.from(
     function renderDesktopControls() {
       searchInput.value = state.q;
       regionSelect.value = state.region;
-      logoSelect.value = state.logo;
       sslSelect.value = state.ssl;
       sortSelect.value = state.sort;
       integrationModeSelect.value = state.integrationMode;
@@ -516,7 +490,6 @@ const integrations = Array.from(
       mobileFiltered.textContent = strings.providers_results_filtered.replace('{count}', String(getFilteredProviders(state).length));
 
       mobileRegionSelect.value = draftState.region;
-      mobileLogoSelect.value = draftState.logo;
       mobileSslSelect.value = draftState.ssl;
       mobileSortSelect.value = draftState.sort;
       mobileIntegrationMode.value = draftState.integrationMode;
@@ -530,7 +503,6 @@ const integrations = Array.from(
 
       if (state.q) chipData.push({ key: 'q', value: state.q, label: `Q: ${state.q}` });
       if (state.region !== 'all') chipData.push({ key: 'region', value: state.region, label: `Region: ${state.region.toUpperCase()}` });
-      if (state.logo !== 'any') chipData.push({ key: 'logo', value: state.logo, label: `Logo: ${state.logo}` });
       if (state.ssl !== 'any') chipData.push({ key: 'ssl', value: state.ssl, label: 'SSL: yes' });
       if (state.integrationMode !== defaults.integrationMode) {
         chipData.push({ key: 'integrationMode', value: state.integrationMode, label: `${strings.providers_integration_mode_label}: ${state.integrationMode}` });
@@ -612,7 +584,6 @@ const integrations = Array.from(
       const params = new URLSearchParams();
       if (state.q) params.set('q', state.q);
       if (state.region !== defaults.region) params.set('region', state.region);
-      if (state.logo !== defaults.logo) params.set('logo', state.logo);
       if (state.integrations.length > 0) params.set('integration', normalizeIntegrations(state.integrations).join(','));
       if (state.integrationMode !== defaults.integrationMode) params.set('integrationMode', state.integrationMode);
       if (state.ssl !== defaults.ssl) params.set('ssl', state.ssl);
@@ -691,7 +662,6 @@ const integrations = Array.from(
       const defaultsForBounds = getDefaultPriceState(bounds);
       state.q = defaults.q;
       state.region = defaults.region;
-      state.logo = defaults.logo;
       state.integrations = [...defaults.integrations];
       state.integrationMode = defaults.integrationMode;
       state.ssl = defaults.ssl;
@@ -706,7 +676,6 @@ const integrations = Array.from(
     function applyDraftToState() {
       updateState({
         region: draftState.region,
-        logo: draftState.logo,
         integrations: draftState.integrations,
         integrationMode: draftState.integrationMode,
         ssl: draftState.ssl,
@@ -788,7 +757,6 @@ const integrations = Array.from(
     });
 
     regionSelect.addEventListener('change', (event) => updateState({ region: event.target.value }, { url: 'push', resetPage: true }));
-    logoSelect.addEventListener('change', (event) => updateState({ logo: event.target.value }, { url: 'push', resetPage: true }));
     sslSelect.addEventListener('change', (event) => updateState({ ssl: event.target.value }, { url: 'push', resetPage: true }));
     sortSelect.addEventListener('change', (event) => updateState({ sort: event.target.value }, { url: 'push', resetPage: true }));
     integrationModeSelect.addEventListener('change', (event) => updateState({ integrationMode: event.target.value }, { url: 'push', resetPage: true }));
@@ -834,7 +802,6 @@ const integrations = Array.from(
       const value = target.dataset.value;
       if (key === 'q') updateState({ q: '' }, { url: 'push', resetPage: true });
       if (key === 'region') updateState({ region: defaults.region }, { url: 'push', resetPage: true });
-      if (key === 'logo') updateState({ logo: defaults.logo }, { url: 'push', resetPage: true });
       if (key === 'ssl') updateState({ ssl: defaults.ssl }, { url: 'push', resetPage: true });
       if (key === 'integration') updateState({ integrations: state.integrations.filter((tag) => tag !== value) }, { url: 'push', resetPage: true });
       if (key === 'integrationMode') updateState({ integrationMode: defaults.integrationMode }, { url: 'push', resetPage: true });
@@ -867,7 +834,6 @@ const integrations = Array.from(
     mobileBackdrop.addEventListener('click', () => closeMobileSheet());
 
     mobileRegionSelect.addEventListener('change', (event) => updateDraft({ region: event.target.value }));
-    mobileLogoSelect.addEventListener('change', (event) => updateDraft({ logo: event.target.value }));
     mobileSslSelect.addEventListener('change', (event) => updateDraft({ ssl: event.target.value }));
     mobileSortSelect.addEventListener('change', (event) => updateDraft({ sort: event.target.value }));
     mobileIntegrationMode.addEventListener('change', (event) => updateDraft({ integrationMode: event.target.value }));
@@ -886,7 +852,6 @@ const integrations = Array.from(
       const bounds = getDefaultPriceState(draftState.priceBounds);
       updateDraft({
         region: defaults.region,
-        logo: defaults.logo,
         integrations: [],
         integrationMode: defaults.integrationMode,
         ssl: defaults.ssl,

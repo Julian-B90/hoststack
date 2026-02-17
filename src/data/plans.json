@@ -1,23 +1,5 @@
 [
   {
-    "id": "aws-starter",
-    "provider_id": "aws",
-    "plan_name": "Starter",
-    "price_eur": 9,
-    "price_usd": 11,
-    "storage_gb": 10,
-    "traffic_gb": 100,
-    "domains": 1,
-    "ssl": true,
-    "integration_tags": [
-      "git",
-      "ci/cd",
-      "ssl"
-    ],
-    "notes": "Placeholder data for prototype. Replace with real pricing.",
-    "last_verified_at": null
-  },
-  {
     "id": "aws-flightcontrol-starter",
     "provider_id": "aws-flightcontrol",
     "plan_name": "Starter",
@@ -120,24 +102,6 @@
     "integration_tags": [
       "git",
       "ci/cd",
-      "ssl"
-    ],
-    "notes": "Placeholder data for prototype. Replace with real pricing.",
-    "last_verified_at": null
-  },
-  {
-    "id": "cloudflare-starter",
-    "provider_id": "cloudflare",
-    "plan_name": "Starter",
-    "price_eur": 19,
-    "price_usd": 21,
-    "storage_gb": 55,
-    "traffic_gb": 200,
-    "domains": 2,
-    "ssl": true,
-    "integration_tags": [
-      "edge",
-      "cdn",
       "ssl"
     ],
     "notes": "Placeholder data for prototype. Replace with real pricing.",
@@ -252,24 +216,6 @@
     "last_verified_at": null
   },
   {
-    "id": "fly-io-starter",
-    "provider_id": "fly-io",
-    "plan_name": "Starter",
-    "price_eur": 29,
-    "price_usd": 31,
-    "storage_gb": 40,
-    "traffic_gb": 300,
-    "domains": 3,
-    "ssl": true,
-    "integration_tags": [
-      "serverless",
-      "api",
-      "ssl"
-    ],
-    "notes": "Placeholder data for prototype. Replace with real pricing.",
-    "last_verified_at": null
-  },
-  {
     "id": "github-pages-starter",
     "provider_id": "github-pages",
     "plan_name": "Starter",
@@ -306,42 +252,6 @@
     "last_verified_at": null
   },
   {
-    "id": "google-cloud-starter",
-    "provider_id": "google-cloud",
-    "plan_name": "Starter",
-    "price_eur": 19,
-    "price_usd": 21,
-    "storage_gb": 25,
-    "traffic_gb": 600,
-    "domains": 3,
-    "ssl": true,
-    "integration_tags": [
-      "edge",
-      "kv",
-      "ssl"
-    ],
-    "notes": "Placeholder data for prototype. Replace with real pricing.",
-    "last_verified_at": null
-  },
-  {
-    "id": "heroku-starter",
-    "provider_id": "heroku",
-    "plan_name": "Starter",
-    "price_eur": 24,
-    "price_usd": 26,
-    "storage_gb": 40,
-    "traffic_gb": 100,
-    "domains": 1,
-    "ssl": true,
-    "integration_tags": [
-      "git",
-      "ci/cd",
-      "ssl"
-    ],
-    "notes": "Placeholder data for prototype. Replace with real pricing.",
-    "last_verified_at": null
-  },
-  {
     "id": "juno-starter",
     "provider_id": "juno",
     "plan_name": "Starter",
@@ -372,78 +282,6 @@
     "integration_tags": [
       "serverless",
       "api",
-      "ssl"
-    ],
-    "notes": "Placeholder data for prototype. Replace with real pricing.",
-    "last_verified_at": null
-  },
-  {
-    "id": "microsoft-azure-starter",
-    "provider_id": "microsoft-azure",
-    "plan_name": "Starter",
-    "price_eur": 14,
-    "price_usd": 16,
-    "storage_gb": 25,
-    "traffic_gb": 400,
-    "domains": 1,
-    "ssl": true,
-    "integration_tags": [
-      "docker",
-      "ci/cd",
-      "ssl"
-    ],
-    "notes": "Placeholder data for prototype. Replace with real pricing.",
-    "last_verified_at": null
-  },
-  {
-    "id": "netlify-starter",
-    "provider_id": "netlify",
-    "plan_name": "Starter",
-    "price_eur": 19,
-    "price_usd": 21,
-    "storage_gb": 40,
-    "traffic_gb": 500,
-    "domains": 2,
-    "ssl": true,
-    "integration_tags": [
-      "database",
-      "backup",
-      "ssl"
-    ],
-    "notes": "Placeholder data for prototype. Replace with real pricing.",
-    "last_verified_at": null
-  },
-  {
-    "id": "railway-starter",
-    "provider_id": "railway",
-    "plan_name": "Starter",
-    "price_eur": 24,
-    "price_usd": 26,
-    "storage_gb": 55,
-    "traffic_gb": 600,
-    "domains": 3,
-    "ssl": true,
-    "integration_tags": [
-      "edge",
-      "kv",
-      "ssl"
-    ],
-    "notes": "Placeholder data for prototype. Replace with real pricing.",
-    "last_verified_at": null
-  },
-  {
-    "id": "render-starter",
-    "provider_id": "render",
-    "plan_name": "Starter",
-    "price_eur": 29,
-    "price_usd": 31,
-    "storage_gb": 10,
-    "traffic_gb": 100,
-    "domains": 1,
-    "ssl": true,
-    "integration_tags": [
-      "git",
-      "ci/cd",
       "ssl"
     ],
     "notes": "Placeholder data for prototype. Replace with real pricing.",
@@ -504,24 +342,6 @@
     "last_verified_at": null
   },
   {
-    "id": "vercel-starter",
-    "provider_id": "vercel",
-    "plan_name": "Starter",
-    "price_eur": 24,
-    "price_usd": 26,
-    "storage_gb": 10,
-    "traffic_gb": 500,
-    "domains": 2,
-    "ssl": true,
-    "integration_tags": [
-      "database",
-      "backup",
-      "ssl"
-    ],
-    "notes": "Placeholder data for prototype. Replace with real pricing.",
-    "last_verified_at": null
-  },
-  {
     "id": "zeabur-starter",
     "provider_id": "zeabur",
     "plan_name": "Starter",
@@ -574,5 +394,583 @@
     ],
     "notes": "Placeholder data for prototype. Replace with real pricing.",
     "last_verified_at": null
+  },
+  {
+    "id": "aws-lightsail-nano-0-5gb",
+    "provider_id": "aws",
+    "plan_name": "Lightsail Nano 0.5GB",
+    "price_usd": 3.5,
+    "storage_gb": 20,
+    "traffic_gb": 1024,
+    "domains": null,
+    "ssl": false,
+    "integration_tags": [
+      "api",
+      "serverless"
+    ],
+    "notes": "source:https://docs.aws.amazon.com/lightsail/latest/userguide/amazon-lightsail-bundles.html; checked_at:2026-02-16; remark:Linux/Unix IPv6-only bundle monthly list price. SSL handled at app/proxy level.",
+    "last_verified_at": "2026-02-16",
+    "price_eur": 2.94
+  },
+  {
+    "id": "aws-lightsail-micro-1gb",
+    "provider_id": "aws",
+    "plan_name": "Lightsail Micro 1GB",
+    "price_usd": 5,
+    "storage_gb": 40,
+    "traffic_gb": 2048,
+    "domains": null,
+    "ssl": false,
+    "integration_tags": [
+      "api",
+      "serverless"
+    ],
+    "notes": "source:https://docs.aws.amazon.com/lightsail/latest/userguide/amazon-lightsail-bundles.html; checked_at:2026-02-16; remark:Linux/Unix IPv6-only bundle monthly list price. SSL handled at app/proxy level.",
+    "last_verified_at": "2026-02-16",
+    "price_eur": 4.2
+  },
+  {
+    "id": "aws-lightsail-small-2gb",
+    "provider_id": "aws",
+    "plan_name": "Lightsail Small 2GB",
+    "price_usd": 10,
+    "storage_gb": 60,
+    "traffic_gb": 3072,
+    "domains": null,
+    "ssl": false,
+    "integration_tags": [
+      "api",
+      "serverless"
+    ],
+    "notes": "source:https://docs.aws.amazon.com/lightsail/latest/userguide/amazon-lightsail-bundles.html; checked_at:2026-02-16; remark:Linux/Unix IPv6-only bundle monthly list price. SSL handled at app/proxy level.",
+    "last_verified_at": "2026-02-16",
+    "price_eur": 8.4
+  },
+  {
+    "id": "aws-lightsail-medium-4gb",
+    "provider_id": "aws",
+    "plan_name": "Lightsail Medium 4GB",
+    "price_usd": 20,
+    "storage_gb": 80,
+    "traffic_gb": 4096,
+    "domains": null,
+    "ssl": false,
+    "integration_tags": [
+      "api",
+      "serverless"
+    ],
+    "notes": "source:https://docs.aws.amazon.com/lightsail/latest/userguide/amazon-lightsail-bundles.html; checked_at:2026-02-16; remark:Linux/Unix IPv6-only bundle monthly list price. SSL handled at app/proxy level.",
+    "last_verified_at": "2026-02-16",
+    "price_eur": 16.8
+  },
+  {
+    "id": "aws-lightsail-large-8gb",
+    "provider_id": "aws",
+    "plan_name": "Lightsail Large 8GB",
+    "price_usd": 40,
+    "storage_gb": 160,
+    "traffic_gb": 5120,
+    "domains": null,
+    "ssl": false,
+    "integration_tags": [
+      "api",
+      "serverless"
+    ],
+    "notes": "source:https://docs.aws.amazon.com/lightsail/latest/userguide/amazon-lightsail-bundles.html; checked_at:2026-02-16; remark:Linux/Unix IPv6-only bundle monthly list price. SSL handled at app/proxy level.",
+    "last_verified_at": "2026-02-16",
+    "price_eur": 33.6
+  },
+  {
+    "id": "microsoft-azure-static-web-apps-free",
+    "provider_id": "microsoft-azure",
+    "plan_name": "Static Web Apps Free",
+    "price_usd": 0,
+    "storage_gb": 0.5,
+    "traffic_gb": 100,
+    "domains": 2,
+    "ssl": true,
+    "integration_tags": [
+      "git",
+      "ci/cd",
+      "serverless",
+      "ssl"
+    ],
+    "notes": "source:https://azure.microsoft.com/en-us/pricing/details/app-service/static/; checked_at:2026-02-16; remark:Free tier with listed quota.",
+    "last_verified_at": "2026-02-16",
+    "price_eur": 0
+  },
+  {
+    "id": "microsoft-azure-static-web-apps-standard",
+    "provider_id": "microsoft-azure",
+    "plan_name": "Static Web Apps Standard",
+    "price_usd": 9,
+    "storage_gb": 2,
+    "traffic_gb": 100,
+    "domains": 5,
+    "ssl": true,
+    "integration_tags": [
+      "git",
+      "ci/cd",
+      "serverless",
+      "ssl"
+    ],
+    "notes": "source:https://azure.microsoft.com/en-us/pricing/details/app-service/static/; checked_at:2026-02-16; remark:Standard tier for production apps; monthly list equivalent used.",
+    "last_verified_at": "2026-02-16",
+    "price_eur": 7.56
+  },
+  {
+    "id": "google-cloud-cloud-run-always-free",
+    "provider_id": "google-cloud",
+    "plan_name": "Cloud Run Always Free",
+    "price_usd": 0,
+    "storage_gb": null,
+    "traffic_gb": null,
+    "domains": null,
+    "ssl": true,
+    "integration_tags": [
+      "api",
+      "serverless",
+      "docker",
+      "ssl"
+    ],
+    "notes": "source:https://cloud.google.com/run/pricing; checked_at:2026-02-16; remark:Always free tier with usage-based metering and no fixed storage/traffic cap in GB.",
+    "last_verified_at": "2026-02-16",
+    "price_eur": 0
+  },
+  {
+    "id": "google-cloud-cloud-run-pay-as-you-go",
+    "provider_id": "google-cloud",
+    "plan_name": "Cloud Run Pay as you go",
+    "price_usd": 0,
+    "storage_gb": null,
+    "traffic_gb": null,
+    "domains": null,
+    "ssl": true,
+    "integration_tags": [
+      "api",
+      "serverless",
+      "docker",
+      "ssl"
+    ],
+    "notes": "source:https://cloud.google.com/run/pricing; checked_at:2026-02-16; remark:Consumption-based pricing (vCPU/RAM/request) with no fixed monthly plan fee.",
+    "last_verified_at": "2026-02-16",
+    "price_eur": 0
+  },
+  {
+    "id": "cloudflare-pages-free",
+    "provider_id": "cloudflare",
+    "plan_name": "Cloudflare Pages Free",
+    "price_usd": 0,
+    "storage_gb": null,
+    "traffic_gb": null,
+    "domains": null,
+    "ssl": true,
+    "integration_tags": [
+      "edge",
+      "cdn",
+      "serverless",
+      "ssl"
+    ],
+    "notes": "source:https://pages.cloudflare.com/?product=crm; checked_at:2026-02-16; remark:Free plan with unlimited static requests/bandwidth; explicit caps not listed as GB/domain count.",
+    "last_verified_at": "2026-02-16",
+    "price_eur": 0
+  },
+  {
+    "id": "cloudflare-pages-pro",
+    "provider_id": "cloudflare",
+    "plan_name": "Cloudflare Pages Pro",
+    "price_usd": 25,
+    "storage_gb": null,
+    "traffic_gb": null,
+    "domains": 250,
+    "ssl": true,
+    "integration_tags": [
+      "edge",
+      "cdn",
+      "serverless",
+      "ssl"
+    ],
+    "notes": "source:https://pages.cloudflare.com/?product=crm; checked_at:2026-02-16; remark:$25/mo billed monthly. 250 custom domains per project listed.",
+    "last_verified_at": "2026-02-16",
+    "price_eur": 21
+  },
+  {
+    "id": "cloudflare-pages-business",
+    "provider_id": "cloudflare",
+    "plan_name": "Cloudflare Pages Business",
+    "price_usd": 250,
+    "storage_gb": null,
+    "traffic_gb": null,
+    "domains": 500,
+    "ssl": true,
+    "integration_tags": [
+      "edge",
+      "cdn",
+      "serverless",
+      "ssl"
+    ],
+    "notes": "source:https://pages.cloudflare.com/?product=crm; checked_at:2026-02-16; remark:$250/mo billed monthly. 500 custom domains per project listed.",
+    "last_verified_at": "2026-02-16",
+    "price_eur": 210
+  },
+  {
+    "id": "vercel-hobby",
+    "provider_id": "vercel",
+    "plan_name": "Hobby",
+    "price_usd": 0,
+    "storage_gb": null,
+    "traffic_gb": null,
+    "domains": null,
+    "ssl": true,
+    "integration_tags": [
+      "git",
+      "ci/cd",
+      "edge",
+      "serverless",
+      "ssl"
+    ],
+    "notes": "source:https://vercel.com/pricing; checked_at:2026-02-16; remark:Hobby plan free forever.",
+    "last_verified_at": "2026-02-16",
+    "price_eur": 0
+  },
+  {
+    "id": "vercel-pro",
+    "provider_id": "vercel",
+    "plan_name": "Pro",
+    "price_usd": 20,
+    "storage_gb": null,
+    "traffic_gb": null,
+    "domains": null,
+    "ssl": true,
+    "integration_tags": [
+      "git",
+      "ci/cd",
+      "edge",
+      "serverless",
+      "ssl"
+    ],
+    "notes": "source:https://vercel.com/pricing; checked_at:2026-02-16; remark:Pro platform fee $20/mo (+ additional usage).",
+    "last_verified_at": "2026-02-16",
+    "price_eur": 16.8
+  },
+  {
+    "id": "netlify-free",
+    "provider_id": "netlify",
+    "plan_name": "Free",
+    "price_usd": 0,
+    "storage_gb": null,
+    "traffic_gb": null,
+    "domains": null,
+    "ssl": true,
+    "integration_tags": [
+      "git",
+      "ci/cd",
+      "cdn",
+      "serverless",
+      "ssl"
+    ],
+    "notes": "source:https://www.netlify.com/pricing/; checked_at:2026-02-16; remark:Free plan with custom domains + SSL.",
+    "last_verified_at": "2026-02-16",
+    "price_eur": 0
+  },
+  {
+    "id": "netlify-personal",
+    "provider_id": "netlify",
+    "plan_name": "Personal",
+    "price_usd": 9,
+    "storage_gb": null,
+    "traffic_gb": null,
+    "domains": null,
+    "ssl": true,
+    "integration_tags": [
+      "git",
+      "ci/cd",
+      "cdn",
+      "serverless",
+      "ssl"
+    ],
+    "notes": "source:https://www.netlify.com/pricing/; checked_at:2026-02-16; remark:Personal plan $9/month.",
+    "last_verified_at": "2026-02-16",
+    "price_eur": 7.56
+  },
+  {
+    "id": "netlify-pro",
+    "provider_id": "netlify",
+    "plan_name": "Pro",
+    "price_usd": 20,
+    "storage_gb": null,
+    "traffic_gb": null,
+    "domains": null,
+    "ssl": true,
+    "integration_tags": [
+      "git",
+      "ci/cd",
+      "cdn",
+      "serverless",
+      "ssl"
+    ],
+    "notes": "source:https://www.netlify.com/pricing/; checked_at:2026-02-16; remark:Pro plan $20 per member/month.",
+    "last_verified_at": "2026-02-16",
+    "price_eur": 16.8
+  },
+  {
+    "id": "render-individual",
+    "provider_id": "render",
+    "plan_name": "Individual",
+    "price_usd": 0,
+    "storage_gb": null,
+    "traffic_gb": null,
+    "domains": null,
+    "ssl": true,
+    "integration_tags": [
+      "git",
+      "ci/cd",
+      "docker",
+      "database",
+      "ssl"
+    ],
+    "notes": "source:https://render.com/pricing; checked_at:2026-02-16; remark:Individual workspace plan (free).",
+    "last_verified_at": "2026-02-16",
+    "price_eur": 0
+  },
+  {
+    "id": "render-professional",
+    "provider_id": "render",
+    "plan_name": "Professional",
+    "price_usd": 19,
+    "storage_gb": null,
+    "traffic_gb": null,
+    "domains": null,
+    "ssl": true,
+    "integration_tags": [
+      "git",
+      "ci/cd",
+      "docker",
+      "database",
+      "ssl"
+    ],
+    "notes": "source:https://render.com/pricing; checked_at:2026-02-16; remark:Professional workspace plan $19/member/month (+ usage).",
+    "last_verified_at": "2026-02-16",
+    "price_eur": 15.96
+  },
+  {
+    "id": "render-organization",
+    "provider_id": "render",
+    "plan_name": "Organization",
+    "price_usd": 29,
+    "storage_gb": null,
+    "traffic_gb": null,
+    "domains": null,
+    "ssl": true,
+    "integration_tags": [
+      "git",
+      "ci/cd",
+      "docker",
+      "database",
+      "ssl"
+    ],
+    "notes": "source:https://render.com/pricing; checked_at:2026-02-16; remark:Organization workspace plan $29/member/month (+ usage).",
+    "last_verified_at": "2026-02-16",
+    "price_eur": 24.36
+  },
+  {
+    "id": "railway-free",
+    "provider_id": "railway",
+    "plan_name": "Free",
+    "price_usd": 0,
+    "storage_gb": 0.5,
+    "traffic_gb": null,
+    "domains": null,
+    "ssl": true,
+    "integration_tags": [
+      "git",
+      "ci/cd",
+      "docker",
+      "database",
+      "api",
+      "ssl"
+    ],
+    "notes": "source:https://docs.railway.com/pricing/plans; checked_at:2026-02-16; remark:Free plan with resource-based usage model and 0.5GB volume storage.",
+    "last_verified_at": "2026-02-16",
+    "price_eur": 0
+  },
+  {
+    "id": "railway-hobby",
+    "provider_id": "railway",
+    "plan_name": "Hobby",
+    "price_usd": 5,
+    "storage_gb": 5,
+    "traffic_gb": null,
+    "domains": null,
+    "ssl": true,
+    "integration_tags": [
+      "git",
+      "ci/cd",
+      "docker",
+      "database",
+      "api",
+      "ssl"
+    ],
+    "notes": "source:https://docs.railway.com/pricing/plans; checked_at:2026-02-16; remark:Hobby subscription $5/month with included usage credit.",
+    "last_verified_at": "2026-02-16",
+    "price_eur": 4.2
+  },
+  {
+    "id": "railway-pro",
+    "provider_id": "railway",
+    "plan_name": "Pro",
+    "price_usd": 20,
+    "storage_gb": 1024,
+    "traffic_gb": null,
+    "domains": null,
+    "ssl": true,
+    "integration_tags": [
+      "git",
+      "ci/cd",
+      "docker",
+      "database",
+      "api",
+      "ssl"
+    ],
+    "notes": "source:https://docs.railway.com/pricing/plans; checked_at:2026-02-16; remark:Pro subscription $20/month with included usage credit.",
+    "last_verified_at": "2026-02-16",
+    "price_eur": 16.8
+  },
+  {
+    "id": "heroku-eco",
+    "provider_id": "heroku",
+    "plan_name": "Eco",
+    "price_usd": 5,
+    "storage_gb": null,
+    "traffic_gb": null,
+    "domains": null,
+    "ssl": true,
+    "integration_tags": [
+      "git",
+      "ci/cd",
+      "database",
+      "api",
+      "ssl"
+    ],
+    "notes": "source:https://devcenter.heroku.com/articles/dyno-sizes; checked_at:2026-02-16; remark:Eco dyno monthly subscription (shared 1000 dyno hours).",
+    "last_verified_at": "2026-02-16",
+    "price_eur": 4.2
+  },
+  {
+    "id": "heroku-basic",
+    "provider_id": "heroku",
+    "plan_name": "Basic",
+    "price_usd": 7,
+    "storage_gb": null,
+    "traffic_gb": null,
+    "domains": null,
+    "ssl": true,
+    "integration_tags": [
+      "git",
+      "ci/cd",
+      "database",
+      "api",
+      "ssl"
+    ],
+    "notes": "source:https://devcenter.heroku.com/articles/dyno-sizes; checked_at:2026-02-16; remark:Basic dyno max monthly list price.",
+    "last_verified_at": "2026-02-16",
+    "price_eur": 5.88
+  },
+  {
+    "id": "heroku-standard-1x",
+    "provider_id": "heroku",
+    "plan_name": "Standard-1X",
+    "price_usd": 25,
+    "storage_gb": null,
+    "traffic_gb": null,
+    "domains": null,
+    "ssl": true,
+    "integration_tags": [
+      "git",
+      "ci/cd",
+      "database",
+      "api",
+      "ssl"
+    ],
+    "notes": "source:https://devcenter.heroku.com/articles/dyno-sizes; checked_at:2026-02-16; remark:Standard-1X dyno max monthly list price.",
+    "last_verified_at": "2026-02-16",
+    "price_eur": 21
+  },
+  {
+    "id": "heroku-standard-2x",
+    "provider_id": "heroku",
+    "plan_name": "Standard-2X",
+    "price_usd": 50,
+    "storage_gb": null,
+    "traffic_gb": null,
+    "domains": null,
+    "ssl": true,
+    "integration_tags": [
+      "git",
+      "ci/cd",
+      "database",
+      "api",
+      "ssl"
+    ],
+    "notes": "source:https://devcenter.heroku.com/articles/dyno-sizes; checked_at:2026-02-16; remark:Standard-2X dyno max monthly list price.",
+    "last_verified_at": "2026-02-16",
+    "price_eur": 42
+  },
+  {
+    "id": "fly-io-pay-as-you-go",
+    "provider_id": "fly-io",
+    "plan_name": "Pay as you go",
+    "price_usd": 0,
+    "storage_gb": null,
+    "traffic_gb": null,
+    "domains": null,
+    "ssl": true,
+    "integration_tags": [
+      "docker",
+      "api",
+      "edge",
+      "ssl"
+    ],
+    "notes": "source:https://fly.io/docs/about/pricing/; checked_at:2026-02-16; remark:Current model is usage-based with no fixed monthly subscription fee.",
+    "last_verified_at": "2026-02-16",
+    "price_eur": 0
+  },
+  {
+    "id": "fly-io-hobby-legacy",
+    "provider_id": "fly-io",
+    "plan_name": "Hobby (legacy)",
+    "price_usd": 5,
+    "storage_gb": 3,
+    "traffic_gb": 100,
+    "domains": null,
+    "ssl": true,
+    "integration_tags": [
+      "docker",
+      "api",
+      "edge",
+      "ssl"
+    ],
+    "notes": "source:https://fly.io/docs/about/pricing/; checked_at:2026-02-16; remark:Legacy plan for existing customers only.",
+    "last_verified_at": "2026-02-16",
+    "price_eur": 4.2
+  },
+  {
+    "id": "fly-io-scale-legacy",
+    "provider_id": "fly-io",
+    "plan_name": "Scale (legacy)",
+    "price_usd": 29,
+    "storage_gb": 3,
+    "traffic_gb": 100,
+    "domains": null,
+    "ssl": true,
+    "integration_tags": [
+      "docker",
+      "api",
+      "edge",
+      "ssl"
+    ],
+    "notes": "source:https://fly.io/docs/about/billing/; checked_at:2026-02-16; remark:Legacy Scale plan example billing at $29/mo for existing pre-2024 customers.",
+    "last_verified_at": "2026-02-16",
+    "price_eur": 24.36
   }
 ]
