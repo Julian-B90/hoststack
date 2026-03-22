@@ -1,9 +1,13 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import AiHosterComparison from '../../components/AiHosterComparison.astro';
 import strings from '../../data/i18n/en.json';
 import providers from '../../data/providers.json';
+import aiHostersData from '../../data/ai-hosters.json';
+import type { AiHosterItem } from '../../lib/types';
 
 const basePath = '/en';
+const aiHosters: AiHosterItem[] = aiHostersData;
 ---
 <BaseLayout lang="en" title="HostStack - Hosting Comparison" strings={strings}>
   <section class="grid gap-8 md:grid-cols-[1.2fr_0.8fr]">
@@ -45,4 +49,6 @@ const basePath = '/en';
       <span class="badge">Integration</span>
     </div>
   </section>
+
+  <AiHosterComparison lang="en" items={aiHosters} strings={strings} />
 </BaseLayout>

@@ -1,0 +1,120 @@
+---
+import aiHostersData from '../data/ai-hosters.json';
+import type {
+  AiHosterItem,
+  AiHostingType,
+  AiSetupLevel,
+  AiHostOptionStatus,
+  AiTargetSystem,
+} from '../lib/types';
+
+interface Props {
+  lang: 'de' | 'en';
+  items?: AiHosterItem[];
+  strings: Record<string, string>;
+}
+
+const { lang, strings } = Astro.props as Props;
+const defaultItems: AiHosterItem[] = aiHostersData;
+const sourceItems = (Astro.props as Props).items && (Astro.props as Props).items?.length
+  ? (Astro.props as Props).items!
+  : defaultItems;
+
+const targetPriority = { openclaw: 0, n8n: 1, other: 2 };
+const items = [...sourceItems].sort((a, b) => {
+  const targetDelta = targetPriority[a.target_system] - targetPriority[b.target_system];
+  if (targetDelta !== 0) return targetDelta;
+  return a.name.localeCompare(b.name, 'en');
+});
+
+const yesNo = (value: boolean) => {
+  if (lang === 'de') return value ? 'Ja' : 'Nein';
+  return value ? 'Yes' : 'No';
+};
+
+const targetSystemLabel = (value: AiTargetSystem) => {
+  const labels =
+    lang === 'de'
+      ? { openclaw: 'OpenClaw', n8n: 'n8n', other: 'Sonstige' }
+      : { openclaw: 'OpenClaw', n8n: 'n8n', other: 'Other' };
+  return labels[value];
+};
+
+const hostingTypeLabel = (value: AiHostingType) => {
+  const labels =
+    lang === 'de'
+      ? { vps: 'VPS', managed: 'Managed', platform: 'Plattform' }
+      : { vps: 'VPS', managed: 'Managed', platform: 'Platform' };
+  return labels[value];
+};
+
+const setupLevelLabel = (value: AiSetupLevel) => {
+  const labels =
+    lang === 'de'
+      ? { self: 'Selbst verwaltet', assisted: 'Teilweise begleitet', managed: 'Voll verwaltet' }
+      : { self: 'Self-managed', assisted: 'Assisted', managed: 'Fully managed' };
+  return labels[value];
+};
+
+const statusLabel = (value: AiHostOptionStatus) => {
+  const labels =
+    lang === 'de'
+      ? { active: 'Aktiv', beta: 'Beta', unknown: 'Unklar' }
+      : { active: 'Active', beta: 'Beta', unknown: 'Unknown' };
+  return labels[value];
+};
+---
+<section class="mt-12 card">
+  <h2 class="text-2xl font-semibold">{strings.section_ai_hosters_title}</h2>
+  <p class="mt-2 text-ink/70">{strings.section_ai_hosters_subtitle}</p>
+
+  <div class="mt-6 grid gap-4 md:grid-cols-2">
+    {items.map((item) => (
+      <article class="card border border-ink/10 p-5 shadow-none">
+        <div class="flex flex-wrap items-center gap-2">
+          <h3 class="text-xl font-semibold">{item.name}</h3>
+          <span class="badge">{targetSystemLabel(item.target_system)}</span>
+          <span class="badge">{hostingTypeLabel(item.hosting_type)}</span>
+          <span class="badge">{statusLabel(item.status)}</span>
+        </div>
+
+        <p class="mt-2 text-sm text-ink/70">{item.focus}</p>
+
+        <dl class="mt-4 grid grid-cols-[minmax(0,1fr)_auto] gap-x-4 gap-y-2 text-sm">
+          <dt class="text-ink/60">{strings.ai_hosters_criteria_target_system}</dt>
+          <dd class="font-medium">{targetSystemLabel(item.target_system)}</dd>
+
+          <dt class="text-ink/60">{strings.ai_hosters_criteria_hosting_type}</dt>
+          <dd class="font-medium">{hostingTypeLabel(item.hosting_type)}</dd>
+
+          <dt class="text-ink/60">{strings.ai_hosters_criteria_setup_level}</dt>
+          <dd class="font-medium">{setupLevelLabel(item.setup_level)}</dd>
+
+          <dt class="text-ink/60">{strings.ai_hosters_criteria_docker_support}</dt>
+          <dd class="font-medium">{yesNo(item.docker_support)}</dd>
+
+          <dt class="text-ink/60">{strings.ai_hosters_criteria_root_access}</dt>
+          <dd class="font-medium">{yesNo(item.root_access)}</dd>
+
+          <dt class="text-ink/60">{strings.ai_hosters_criteria_price_model}</dt>
+          <dd class="max-w-[16rem] text-right font-medium">{item.price_model}</dd>
+
+          <dt class="text-ink/60">{strings.ai_hosters_criteria_best_for}</dt>
+          <dd class="max-w-[16rem] text-right font-medium">{item.best_for}</dd>
+
+          <dt class="text-ink/60">{strings.ai_hosters_criteria_limitations}</dt>
+          <dd class="max-w-[16rem] text-right font-medium">{item.limitations}</dd>
+        </dl>
+
+        <a
+          href={item.website_url}
+          class="btn-outline mt-5"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {strings.ai_hosters_cta_website}
+        </a>
+      </article>
+    ))}
+  </div>
+</section>
