@@ -57,5 +57,14 @@
   "providers_mobile_filter_apply": "Übernehmen",
   "providers_mobile_filter_reset": "Zurücksetzen",
   "providers_pagination_prev": "Zurück",
-  "providers_pagination_next": "Weiter"
+  "providers_pagination_next": "Weiter",
+  "meta_description": "Hosting-Anbieter vergleichen: Preise, Speicher, SSL und Integrationen. Finde das beste Hosting für dein Projekt.",
+  "cta_visit_provider": "Zum Anbieter",
+  "compare_scroll_hint": "Tabelle horizontal scrollbar",
+  "compare_action_column": "Aktion",
+  "providers_detail_label": "Details",
+  "404_title": "Seite nicht gefunden",
+  "404_subtitle": "Die gesuchte Seite existiert nicht.",
+  "404_cta_home": "Zur Startseite",
+  "404_cta_providers": "Anbieter entdecken"
 }

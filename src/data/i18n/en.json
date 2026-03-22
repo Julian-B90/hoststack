@@ -57,5 +57,14 @@
   "providers_mobile_filter_apply": "Apply",
   "providers_mobile_filter_reset": "Reset",
   "providers_pagination_prev": "Previous",
-  "providers_pagination_next": "Next"
+  "providers_pagination_next": "Next",
+  "meta_description": "Compare hosting providers: prices, storage, SSL and integrations. Find the best hosting for your project.",
+  "cta_visit_provider": "Visit provider",
+  "compare_scroll_hint": "Scroll table horizontally",
+  "compare_action_column": "Action",
+  "providers_detail_label": "Details",
+  "404_title": "Page not found",
+  "404_subtitle": "The page you're looking for doesn't exist.",
+  "404_cta_home": "Go home",
+  "404_cta_providers": "Explore providers"
 }

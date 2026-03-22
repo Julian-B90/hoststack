@@ -1,7 +1,7 @@
 ---
 import '../styles/global.css';
 
-const { lang, title, strings } = Astro.props;
+const { lang, title, strings, description, ogImage, canonical } = Astro.props;
 const basePath = lang === 'de' ? '/de' : '/en';
 const otherLang = lang === 'de' ? 'en' : 'de';
 const otherPath = otherLang === 'de' ? '/de' : '/en';
@@ -9,6 +9,9 @@ const currentPath = Astro.url.pathname || basePath;
 const switchedPath = currentPath.startsWith(basePath)
   ? currentPath.replace(basePath, otherPath)
   : otherPath;
+const canonicalUrl = canonical ?? Astro.url.href;
+const metaDescription = description ?? strings.meta_description ?? '';
+const ogImageUrl = ogImage ?? '/og-default.png';
 ---
 <!doctype html>
 <html lang={lang} data-currency="eur">
@@ -16,6 +19,16 @@ const switchedPath = currentPath.startsWith(basePath)
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
+    <meta name="description" content={metaDescription} />
+    <link rel="canonical" href={canonicalUrl} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={metaDescription} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <link rel="alternate" hreflang={lang} href={canonicalUrl} />
+    <link rel="alternate" hreflang={otherLang} href={Astro.url.origin + switchedPath} />
+    <link rel="alternate" hreflang="x-default" href={Astro.url.origin + switchedPath} />
   </head>
   <body class="gradient-bg min-h-screen">
     <div class="mx-auto flex min-h-screen w-full max-w-6xl flex-col px-6 pb-16 pt-10">

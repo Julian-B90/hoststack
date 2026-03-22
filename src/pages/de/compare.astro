@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import strings from '../../data/i18n/de.json';
 import providers from '../../data/providers.json';
 import plans from '../../data/plans.json';
+import { buildAffiliateUrl } from '../../lib/affiliate';
 
 const providerMap = new Map(providers.map((p) => [p.id, p]));
 const enrichedPlans = plans.map((plan) => ({
@@ -65,6 +66,7 @@ const hasPlans = enrichedPlans.length > 0;
               <th class="pb-3">Domains</th>
               <th class="pb-3">SSL</th>
               <th class="pb-3">Integration</th>
+              <th class="pb-3">{strings.compare_action_column}</th>
             </tr>
           </thead>
           <tbody>
@@ -97,11 +99,24 @@ const hasPlans = enrichedPlans.length > 0;
                 <td class="py-3 pr-4">{plan.domains ?? '-'}</td>
                 <td class="py-3 pr-4">{plan.ssl ? 'Ja' : 'Nein'}</td>
                 <td class="py-3 pr-4">{(plan.integration_tags || []).join(', ') || '-'}</td>
+                <td class="py-3 pr-4">
+                  {plan.provider?.affiliate_url && (
+                    <a
+                      class="btn-cta"
+                      href={buildAffiliateUrl(plan.provider.affiliate_url, { source: 'hoststack', medium: 'compare', campaign: plan.provider?.slug })}
+                      rel="sponsored noopener"
+                      target="_blank"
+                    >
+                      {strings.cta_visit_provider}
+                    </a>
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+      <p class="mt-2 block md:hidden text-xs uppercase tracking-[0.2em] text-ink/50">{strings.compare_scroll_hint}</p>
     )}
   </section>
 

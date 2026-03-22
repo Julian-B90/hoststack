@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import strings from '../../data/i18n/en.json';
+---
+<BaseLayout lang="en" title="404 – HostStack" strings={strings}>
+  <section class="card text-center py-16">
+    <p class="text-xs uppercase tracking-[0.2em] text-ink/50">Error</p>
+    <h1 class="mt-4 font-display text-8xl uppercase tracking-[0.1em]">404</h1>
+    <p class="mt-6 text-ink/70">{strings["404_subtitle"]}</p>
+    <div class="mt-8 flex flex-wrap justify-center gap-3">
+      <a href="/en" class="btn">{strings["404_cta_home"]}</a>
+      <a href="/en/providers" class="btn-outline">{strings["404_cta_providers"]}</a>
+    </div>
+  </section>
+</BaseLayout>

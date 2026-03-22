@@ -13,6 +13,9 @@ Der UX Engineer verantwortet alle Design- und Usability-Entscheidungen. Er gesta
 
 ---
 
+## Skillset & Tools
+- use skill ui-ux-pro-max
+
 ## Analyse des vorhandenen UX/UI-Stands
 
 ### Designsystem-Grundlagen

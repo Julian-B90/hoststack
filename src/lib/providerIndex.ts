@@ -1,21 +1,5 @@
-export type Provider = {
-  id: string;
-  name: string;
-  slug: string;
-  logo?: string;
-  region?: string;
-  short_desc?: string;
-  logo_note_de?: string;
-  logo_note_en?: string;
-};
-
-export type Plan = {
-  provider_id: string;
-  price_eur?: number | null;
-  price_usd?: number | null;
-  ssl?: boolean;
-  integration_tags?: string[];
-};
+import type { Provider, Plan } from './types';
+export type { Provider, Plan };
 
 export type ProviderIndexItem = {
   id: string;
@@ -32,6 +16,7 @@ export type ProviderIndexItem = {
   has_ssl: boolean;
   integration_tags: string[];
   has_logo: boolean;
+  affiliate_url: string;
 };
 
 export type FilterState = {
@@ -85,6 +70,7 @@ export function buildProviderIndex(providers: Provider[], plans: Plan[]): Provid
       has_ssl: providerPlans.some((plan) => plan.ssl === true),
       integration_tags: integrationTags,
       has_logo: Boolean(provider.logo && provider.logo.trim().length > 0),
+      affiliate_url: provider.affiliate_url || '',
     };
   });
 }

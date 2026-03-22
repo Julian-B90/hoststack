@@ -525,29 +525,40 @@ const integrations = Array.from(
 
     function renderCards(pageItems) {
       const currency = getCurrency();
+      const affiliateLabel = strings.cta_visit_provider || 'Zum Anbieter';
+      const detailLabel = strings.providers_detail_label || 'Details';
       results.innerHTML = pageItems.map((provider) => {
         const note = meta.lang === 'de' ? provider.logo_note_de : provider.logo_note_en;
         const price = getPrice(provider, currency);
+        const detailUrl = `${meta.basePath}/providers/${escapeHtml(provider.slug)}`;
+        const logoHtml = provider.logo
+          ? `<img src="${escapeHtml(provider.logo)}" alt="${escapeHtml(provider.name)} logo" class="h-8 w-8 object-contain" />`
+          : `<span>${escapeHtml(provider.name.slice(0, 2).toUpperCase())}</span>`;
+        const affiliateCta = provider.affiliate_url
+          ? `<a class="btn-cta" href="${escapeHtml(provider.affiliate_url)}" rel="sponsored noopener" target="_blank">${affiliateLabel}</a>`
+          : '';
+        const cardBottom = `<div class="mt-4 flex items-center justify-end gap-2">${affiliateCta}<a class="btn-outline" href="${detailUrl}">${detailLabel}</a></div>`;
         return `
-          <a class="card flex items-center gap-4 transition hover:-translate-y-1" href="${meta.basePath}/${escapeHtml(provider.slug)}">
-            <div class="flex h-12 w-12 items-center justify-center rounded-2xl border border-ink/10 bg-white text-xs uppercase tracking-[0.2em] text-ink/50">
-              ${provider.logo
-                ? `<img src="${escapeHtml(provider.logo)}" alt="${escapeHtml(provider.name)} logo" class="h-8 w-8 object-contain" />`
-                : escapeHtml(provider.name.slice(0, 2))}
-            </div>
-            <div>
-              <div class="flex items-center gap-3">
-                <h2 class="text-lg font-semibold">${escapeHtml(provider.name)}</h2>
-                <span class="rounded-full border border-ink/10 px-2 py-0.5 text-[10px] uppercase tracking-[0.2em] text-ink/60">${escapeHtml(provider.region || 'global')}</span>
+          <div class="card flex flex-col gap-4 transition hover:-translate-y-1">
+            <div class="flex items-center gap-4">
+              <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-ink/10 bg-white text-xs uppercase tracking-[0.2em] text-ink/50">
+                ${logoHtml}
               </div>
-              ${note ? `<p class="mt-1 text-[10px] uppercase tracking-[0.2em] text-ink/50">${escapeHtml(note)}</p>` : ''}
-              <p class="mt-2 text-sm text-ink/70">${escapeHtml(provider.short_desc || '')}</p>
-              <div class="mt-3 flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.2em] text-ink/60">
-                <span>${escapeHtml(strings.providers_plan_count.replace('{count}', String(provider.plan_count)))}</span>
-                <span>${escapeHtml(strings.providers_price_from.replace('{price}', formatCurrency(price, currency)))}</span>
+              <div class="min-w-0">
+                <div class="flex items-center gap-3">
+                  <h2 class="text-lg font-semibold">${escapeHtml(provider.name)}</h2>
+                  <span class="rounded-full border border-ink/10 px-2 py-0.5 text-[10px] uppercase tracking-[0.2em] text-ink/60">${escapeHtml(provider.region || 'global')}</span>
+                </div>
+                ${note ? `<p class="mt-1 text-[10px] uppercase tracking-[0.2em] text-ink/50">${escapeHtml(note)}</p>` : ''}
+                <p class="mt-2 text-sm text-ink/70">${escapeHtml(provider.short_desc || '')}</p>
+                <div class="mt-3 flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.2em] text-ink/60">
+                  <span>${escapeHtml(strings.providers_plan_count.replace('{count}', String(provider.plan_count)))}</span>
+                  <span>${escapeHtml(strings.providers_price_from.replace('{price}', formatCurrency(price, currency)))}</span>
+                </div>
               </div>
             </div>
-          </a>
+            ${cardBottom}
+          </div>
         `;
       }).join('');
     }
