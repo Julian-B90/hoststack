@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import DomainComparison from '../../components/DomainComparison.astro';
+import strings from '../../data/i18n/de.json';
+import registrars from '../../data/domain-registrars.json';
+import prices from '../../data/domain-prices.json';
+
+const supportedTlds = ['com', 'de', 'net', 'org', 'io'];
+---
+
+<BaseLayout
+  lang="de"
+  title="HostStack – Domain-Preise vergleichen"
+  strings={strings}
+  description={strings.domains_meta_description}
+>
+  <div class="space-y-6">
+    <div class="card">
+      <h1 class="font-display text-4xl uppercase tracking-[0.1em]">
+        {strings.domains_page_title}
+      </h1>
+      <p class="mt-3 text-ink/70">{strings.domains_page_subtitle}</p>
+    </div>
+
+    <DomainComparison
+      lang="de"
+      strings={strings}
+      registrars={registrars}
+      prices={prices}
+      supportedTlds={supportedTlds}
+    />
+  </div>
+</BaseLayout>

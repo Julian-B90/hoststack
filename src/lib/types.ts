@@ -26,6 +26,57 @@ export interface Plan {
   last_verified_at: string | null;
 }
 
+export interface DomainRegistrar {
+  id: string;
+  name: string;
+  slug: string;
+  logo: string;
+  website_url: string;
+  affiliate_url: string;
+  search_url_template: string;
+  region: string;
+  whois_privacy_always_free: boolean;
+  last_verified_at: string | null;
+}
+
+export interface DomainPrice {
+  id: string;
+  registrar_id: string;
+  tld: string;
+  register_price_eur: number | null;
+  register_price_usd: number | null;
+  renew_price_eur: number | null;
+  renew_price_usd: number | null;
+  transfer_price_eur: number | null;
+  transfer_price_usd: number | null;
+  whois_privacy: boolean;
+  free_ssl: boolean;
+  dns_management: boolean;
+  notes: string | null;
+  last_verified_at: string | null;
+}
+
+export interface TldPriceRow {
+  registrar_id: string;
+  registrar_name: string;
+  registrar_logo: string;
+  affiliate_url: string;
+  search_url_template: string;
+  tld: string;
+  register_price_eur: number | null;
+  register_price_usd: number | null;
+  renew_price_eur: number | null;
+  renew_price_usd: number | null;
+  transfer_price_eur: number | null;
+  transfer_price_usd: number | null;
+  whois_privacy: boolean;
+  free_ssl: boolean;
+  dns_management: boolean;
+  notes: string | null;
+}
+
+export type DomainSortMode = 'renew' | 'register';
+
 export type AiTargetSystem = 'openclaw' | 'n8n' | 'other';
 export type AiHostingType = 'vps' | 'managed' | 'platform';
 export type AiSetupLevel = 'self' | 'assisted' | 'managed';

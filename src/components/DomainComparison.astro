@@ -1,0 +1,367 @@
+---
+import type { DomainRegistrar, DomainPrice } from '../lib/types';
+
+interface Props {
+  lang: 'de' | 'en';
+  strings: Record<string, string>;
+  registrars: DomainRegistrar[];
+  prices: DomainPrice[];
+  supportedTlds: string[];
+}
+
+const { lang, strings, registrars, prices, supportedTlds } = Astro.props;
+---
+
+<section class="card mt-8 space-y-6">
+  <div>
+    <h2 class="font-display text-2xl uppercase tracking-[0.1em]">{strings.domains_title}</h2>
+    <p class="mt-1 text-sm text-ink/70">{strings.domains_subtitle}</p>
+  </div>
+
+  <!-- Search input -->
+  <div>
+    <label class="block text-xs font-semibold uppercase tracking-[0.2em] text-ink/60 mb-2">
+      {strings.domains_search_label}
+    </label>
+    <div class="flex gap-2">
+      <input
+        id="domain-input"
+        type="text"
+        placeholder={strings.domains_search_placeholder}
+        class="flex-1 rounded-full border border-ink/20 bg-white/80 px-4 py-2 text-sm text-ink placeholder:text-ink/40 focus:border-ink/40 focus:outline-none"
+        autocomplete="off"
+        autocapitalize="none"
+        spellcheck="false"
+      />
+      <button id="domain-search-btn" class="btn">
+        {strings.domains_search_btn}
+      </button>
+    </div>
+
+    <!-- TLD shortcut pills -->
+    <div class="mt-3 flex flex-wrap gap-2">
+      {supportedTlds.map((tld) => (
+        <button
+          class="tld-pill badge cursor-pointer transition hover:border-ember hover:text-ember"
+          data-tld={tld}
+        >
+          .{tld}
+        </button>
+      ))}
+    </div>
+
+    <!-- Unsupported TLD message -->
+    <p id="domain-unsupported-msg" class="mt-2 hidden text-xs text-ember">
+      {strings.domains_unsupported_tld}
+    </p>
+  </div>
+
+  <!-- Sort control -->
+  <div class="flex flex-wrap items-center gap-4">
+    <label class="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-ink/60">
+      {strings.domains_sort_label}
+      <select
+        id="domain-sort"
+        class="rounded-full border border-ink/20 bg-white/80 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-ink focus:border-ink/40 focus:outline-none"
+      >
+        <option value="renew">{strings.domains_sort_renew}</option>
+        <option value="register">{strings.domains_sort_register}</option>
+      </select>
+    </label>
+  </div>
+
+  <!-- Results area -->
+  <div id="domain-results">
+    <!-- Initial / empty state -->
+    <p id="domain-empty-prompt" class="text-sm text-ink/50">{strings.domains_empty_prompt}</p>
+
+    <!-- Table (hidden until search) -->
+    <div id="domain-table-wrap" class="hidden">
+      <p id="domain-tld-heading" class="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-ink/60"></p>
+      <div class="overflow-x-auto">
+        <table class="min-w-full text-sm">
+          <thead>
+            <tr class="border-b border-ink/10 text-left text-xs uppercase tracking-[0.2em] text-ink/60">
+              <th class="pb-3 pr-4 font-semibold">{strings.domains_col_registrar}</th>
+              <th class="pb-3 pr-4 font-semibold">{strings.domains_col_register}</th>
+              <th class="pb-3 pr-4 font-semibold">{strings.domains_col_renew}</th>
+              <th class="pb-3 pr-4 font-semibold">{strings.domains_col_transfer}</th>
+              <th class="pb-3 pr-4 font-semibold">{strings.domains_col_whois}</th>
+              <th class="pb-3 pr-4 font-semibold">{strings.domains_col_ssl}</th>
+              <th class="pb-3 pr-4 font-semibold">{strings.domains_col_dns}</th>
+              <th class="pb-3 font-semibold">{strings.domains_col_action}</th>
+            </tr>
+          </thead>
+          <tbody id="domain-tbody"></tbody>
+        </table>
+      </div>
+      <p class="mt-2 block md:hidden text-xs uppercase tracking-[0.2em] text-ink/50">
+        {strings.compare_scroll_hint}
+      </p>
+    </div>
+  </div>
+
+  <!-- Data note -->
+  <p class="text-xs text-ink/40">{strings.domains_data_note}</p>
+</section>
+
+<!-- Embedded data for client script -->
+<script type="application/json" id="domain-registrars-data" set:html={JSON.stringify(registrars)} />
+<script type="application/json" id="domain-prices-data" set:html={JSON.stringify(prices)} />
+<script type="application/json" id="domain-ui-strings" set:html={JSON.stringify({
+  tld_heading: strings.domains_tld_heading,
+  no_offer: strings.domains_no_offer,
+  yes: strings.domains_yes,
+  no: strings.domains_no,
+  col_action: strings.domains_col_action,
+})} />
+<script type="application/json" id="domain-meta" set:html={JSON.stringify({ supportedTlds, lang })} />
+
+<script is:inline>
+(function () {
+  var registrars = JSON.parse(document.getElementById('domain-registrars-data').textContent);
+  var prices = JSON.parse(document.getElementById('domain-prices-data').textContent);
+  var ui = JSON.parse(document.getElementById('domain-ui-strings').textContent);
+  var meta = JSON.parse(document.getElementById('domain-meta').textContent);
+
+  var supportedTlds = meta.supportedTlds;
+  var activeTld = null;
+  var lastDomain = '';
+  var currentSort = 'renew';
+  var currentCurrency = document.documentElement.dataset.currency || 'eur';
+
+  // Build registrar lookup map
+  var regMap = {};
+  registrars.forEach(function (r) { regMap[r.id] = r; });
+
+  function extractTld(input) {
+    var cleaned = input.trim().toLowerCase().replace(/^https?:\/\//, '').replace(/\/$/, '');
+    var parts = cleaned.split('.').filter(Boolean);
+    if (parts.length < 2) return null;
+    var tld = parts[parts.length - 1];
+    return supportedTlds.indexOf(tld) !== -1 ? tld : null;
+  }
+
+  function buildSearchUrl(template, domain) {
+    return template.replace('{domain}', encodeURIComponent(domain));
+  }
+
+  function formatPrice(eur, usd, currency) {
+    var val = currency === 'usd' ? usd : eur;
+    var fallback = currency === 'usd' ? eur : usd;
+    var sym = currency === 'usd' ? '$' : '€';
+    if (val === null || val === undefined) {
+      if (fallback === null || fallback === undefined) return ui.no_offer;
+      return '~€' + fallback.toFixed(2);
+    }
+    return sym + val.toFixed(2);
+  }
+
+  function getPrice(row, mode, currency) {
+    var eurKey = mode === 'renew' ? 'renew_price_eur' : 'register_price_eur';
+    var usdKey = mode === 'renew' ? 'renew_price_usd' : 'register_price_usd';
+    return currency === 'eur'
+      ? row[eurKey]
+      : (row[usdKey] !== null ? row[usdKey] : row[eurKey]);
+  }
+
+  function getFilteredRows(tld) {
+    return prices.filter(function (p) {
+      return p.tld === tld && (p.renew_price_eur !== null || p.renew_price_usd !== null);
+    }).map(function (p) {
+      var reg = regMap[p.registrar_id];
+      if (!reg) return null;
+      return {
+        registrar_id: p.registrar_id,
+        registrar_name: reg.name,
+        registrar_logo: reg.logo,
+        affiliate_url: reg.affiliate_url,
+        search_url_template: reg.search_url_template,
+        tld: p.tld,
+        register_price_eur: p.register_price_eur,
+        register_price_usd: p.register_price_usd,
+        renew_price_eur: p.renew_price_eur,
+        renew_price_usd: p.renew_price_usd,
+        transfer_price_eur: p.transfer_price_eur,
+        transfer_price_usd: p.transfer_price_usd,
+        whois_privacy: p.whois_privacy,
+        free_ssl: p.free_ssl,
+        dns_management: p.dns_management,
+        notes: p.notes,
+      };
+    }).filter(Boolean);
+  }
+
+  function sortRows(rows) {
+    return rows.slice().sort(function (a, b) {
+      var aVal = getPrice(a, currentSort, currentCurrency);
+      var bVal = getPrice(b, currentSort, currentCurrency);
+      if (aVal === null && bVal === null) return a.registrar_name.localeCompare(b.registrar_name);
+      if (aVal === null) return 1;
+      if (bVal === null) return -1;
+      return aVal - bVal;
+    });
+  }
+
+  function makeCell(content, classes) {
+    var td = document.createElement('td');
+    td.className = classes || '';
+    td.textContent = content;
+    return td;
+  }
+
+  function makePriceCell(eur, usd, extraClasses) {
+    var td = document.createElement('td');
+    td.className = 'py-3 pr-4 tabular-nums ' + (extraClasses || '');
+    td.dataset.eur = eur !== null && eur !== undefined ? String(eur) : '';
+    td.dataset.usd = usd !== null && usd !== undefined ? String(usd) : '';
+    td.textContent = formatPrice(eur, usd, currentCurrency);
+    return td;
+  }
+
+  function makeBoolCell(val) {
+    var td = document.createElement('td');
+    td.className = 'py-3 pr-4 text-center';
+    var span = document.createElement('span');
+    span.textContent = val ? ui.yes : ui.no;
+    span.className = val ? 'font-bold text-moss' : 'text-ink/30';
+    td.appendChild(span);
+    return td;
+  }
+
+  function makeActionCell(affiliateUrl, searchUrl) {
+    var td = document.createElement('td');
+    td.className = 'py-3';
+    var link = document.createElement('a');
+    link.textContent = ui.col_action;
+    link.target = '_blank';
+    if (affiliateUrl) {
+      link.href = affiliateUrl;
+      link.rel = 'sponsored noopener';
+      link.className = 'btn-cta text-xs px-3 py-2';
+    } else {
+      link.href = searchUrl;
+      link.rel = 'noopener';
+      link.className = 'btn-outline text-xs';
+    }
+    td.appendChild(link);
+    return td;
+  }
+
+  function renderTable(tld, domain) {
+    activeTld = tld;
+    lastDomain = domain;
+
+    var rows = getFilteredRows(tld);
+    var sorted = sortRows(rows);
+
+    document.getElementById('domain-tld-heading').textContent = ui.tld_heading.replace('{tld}', tld);
+
+    var tbody = document.getElementById('domain-tbody');
+    while (tbody.firstChild) tbody.removeChild(tbody.firstChild);
+
+    sorted.forEach(function (row) {
+      var tr = document.createElement('tr');
+      tr.className = 'border-b border-ink/5 transition hover:bg-ink/[0.02]';
+
+      // Registrar name + optional note
+      var nameTd = document.createElement('td');
+      nameTd.className = 'py-3 pr-4 font-medium';
+      var nameSpan = document.createElement('span');
+      nameSpan.textContent = row.registrar_name;
+      nameTd.appendChild(nameSpan);
+      if (row.notes) {
+        var noteEl = document.createElement('span');
+        noteEl.className = 'block text-xs text-ink/40';
+        noteEl.textContent = row.notes;
+        nameTd.appendChild(noteEl);
+      }
+
+      var searchUrl = buildSearchUrl(row.search_url_template, domain || ('.' + tld));
+
+      tr.appendChild(nameTd);
+      tr.appendChild(makePriceCell(row.register_price_eur, row.register_price_usd, 'domain-price-register'));
+      tr.appendChild(makePriceCell(row.renew_price_eur, row.renew_price_usd, 'domain-price-renew font-semibold'));
+      tr.appendChild(makePriceCell(row.transfer_price_eur, row.transfer_price_usd, 'domain-price-transfer text-ink/60'));
+      tr.appendChild(makeBoolCell(row.whois_privacy));
+      tr.appendChild(makeBoolCell(row.free_ssl));
+      tr.appendChild(makeBoolCell(row.dns_management));
+      tr.appendChild(makeActionCell(row.affiliate_url, searchUrl));
+
+      tbody.appendChild(tr);
+    });
+
+    document.getElementById('domain-empty-prompt').classList.add('hidden');
+    document.getElementById('domain-table-wrap').classList.remove('hidden');
+  }
+
+  function updatePrices() {
+    currentCurrency = document.documentElement.dataset.currency || 'eur';
+    var sym = currentCurrency === 'usd' ? '$' : '€';
+    ['domain-price-register', 'domain-price-renew', 'domain-price-transfer'].forEach(function (cls) {
+      document.querySelectorAll('.' + cls).forEach(function (cell) {
+        var eur = cell.dataset.eur !== '' ? parseFloat(cell.dataset.eur) : null;
+        var usd = cell.dataset.usd !== '' ? parseFloat(cell.dataset.usd) : null;
+        if (isNaN(eur)) eur = null;
+        if (isNaN(usd)) usd = null;
+        if (eur === null && usd === null) {
+          cell.textContent = ui.no_offer;
+        } else {
+          var val = currentCurrency === 'usd' ? usd : eur;
+          if (val === null) {
+            val = currentCurrency === 'usd' ? eur : usd;
+            cell.textContent = '~€' + val.toFixed(2);
+          } else {
+            cell.textContent = sym + val.toFixed(2);
+          }
+        }
+      });
+    });
+    if (activeTld) renderTable(activeTld, lastDomain);
+  }
+
+  function handleSearch() {
+    var raw = document.getElementById('domain-input').value;
+    var tld = extractTld(raw);
+    var msg = document.getElementById('domain-unsupported-msg');
+    if (!tld) {
+      msg.classList.remove('hidden');
+      return;
+    }
+    msg.classList.add('hidden');
+    document.querySelectorAll('.tld-pill').forEach(function (pill) {
+      pill.classList.toggle('border-ember', pill.dataset.tld === tld);
+      pill.classList.toggle('text-ember', pill.dataset.tld === tld);
+    });
+    renderTable(tld, raw.trim());
+  }
+
+  document.getElementById('domain-search-btn').addEventListener('click', handleSearch);
+  document.getElementById('domain-input').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') handleSearch();
+  });
+
+  document.getElementById('domain-sort').addEventListener('change', function (e) {
+    currentSort = e.target.value;
+    if (activeTld) renderTable(activeTld, lastDomain);
+  });
+
+  document.querySelectorAll('.tld-pill').forEach(function (pill) {
+    pill.addEventListener('click', function () {
+      var tld = pill.dataset.tld;
+      document.getElementById('domain-input').value = '.' + tld;
+      document.getElementById('domain-unsupported-msg').classList.add('hidden');
+      document.querySelectorAll('.tld-pill').forEach(function (p) {
+        p.classList.toggle('border-ember', p.dataset.tld === tld);
+        p.classList.toggle('text-ember', p.dataset.tld === tld);
+      });
+      renderTable(tld, '.' + tld);
+    });
+  });
+
+  window.addEventListener('currency-change', function (e) {
+    currentCurrency = e.detail || 'eur';
+    updatePrices();
+  });
+})();
+</script>
